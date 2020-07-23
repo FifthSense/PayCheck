@@ -55,39 +55,51 @@ const uiMethods = {
         //Month-Changer
         uiSelectors.yearMonthSelection.monthSelection.januari.addEventListener('click', () => {
             uiMethods.changeMonthIndex(0);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.februari.addEventListener('click', () => {
             uiMethods.changeMonthIndex(1);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.maart.addEventListener('click', () => {
             uiMethods.changeMonthIndex(2);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.april.addEventListener('click', () => {
             uiMethods.changeMonthIndex(3);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.mei.addEventListener('click', () => {
             uiMethods.changeMonthIndex(4);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.juni.addEventListener('click', () => {
             uiMethods.changeMonthIndex(5);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.juli.addEventListener('click', () => {
             uiMethods.changeMonthIndex(6);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.augustus.addEventListener('click', () => {
             uiMethods.changeMonthIndex(7);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.september.addEventListener('click', () => {
             uiMethods.changeMonthIndex(8);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.oktober.addEventListener('click', () => {
             uiMethods.changeMonthIndex(9);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.november.addEventListener('click', () => {
             uiMethods.changeMonthIndex(10);
+            uiMethods.changeActiveMonthIndicator();
         });
         uiSelectors.yearMonthSelection.monthSelection.december.addEventListener('click', () => {
             uiMethods.changeMonthIndex(11);
+            uiMethods.changeActiveMonthIndicator();
         });
     },
     "toggleSettings": () => {
@@ -211,6 +223,165 @@ const uiMethods = {
             currentYearArray = shiftsExport.x2027;
         }
         uiMethods.displayShiftList();
+    },
+    "changeActiveMonthIndicator": () => {
+        if(currentMonthIndex === 0){
+            uiSelectors.yearMonthSelection.monthSelection.januari.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 1){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 2){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 3){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 4){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 5){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 6){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 7){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 8){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 9){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 10){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.id = "active";
+            uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
+        } else if(currentMonthIndex === 11){
+            uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.april.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.mei.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juni.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.juli.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.augustus.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.september.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
+            uiSelectors.yearMonthSelection.monthSelection.december.id = "active";
+        }
     }
 }
 

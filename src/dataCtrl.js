@@ -1,9 +1,6 @@
 const shifts = {
         x2020: [
-            [{"dag":"2020","startuur":"1.50","einduur":"5.50","werkgever":{
-                "naam":"Serafina",
-                "uurloon":10
-            }}],
+            [],
             [],
             [],
             [],
@@ -17,10 +14,7 @@ const shifts = {
             []
         ],
         x2021: [
-            [{"dag":"2021","startuur":"1.50","einduur":"5.50","werkgever":{
-                "naam":"Serafina",
-                "uurloon":10
-            }}],
+            [],
             [],
             [],
             [],
@@ -34,10 +28,7 @@ const shifts = {
             []
         ],
         x2022: [
-            [{"dag":"2022","startuur":"1.50","einduur":"5.50","werkgever":{
-                "naam":"Serafina",
-                "uurloon":10
-            }}],
+            [],
             [],
             [],
             [],
@@ -51,10 +42,7 @@ const shifts = {
             []
         ],
         x2023: [
-            [{"dag":"2023","startuur":"1.50","einduur":"5.50","werkgever":{
-                "naam":"Serafina",
-                "uurloon":10
-            }}],
+            [],
             [],
             [],
             [],
@@ -68,10 +56,7 @@ const shifts = {
             []
         ],
         x2024: [
-            [{"dag":"2024","startuur":"1.50","einduur":"5.50","werkgever":{
-                "naam":"Serafina",
-                "uurloon":10
-            }}],
+            [],
             [],
             [],
             [],
@@ -85,10 +70,7 @@ const shifts = {
             []
         ],
         x2025: [
-            [{"dag":"2025","startuur":"1.50","einduur":"5.50","werkgever":{
-                "naam":"Serafina",
-                "uurloon":10
-            }}],
+            [],
             [],
             [],
             [],
@@ -102,10 +84,7 @@ const shifts = {
             []
         ],
         x2026: [
-            [{"dag":"2026","startuur":"1.50","einduur":"5.50","werkgever":{
-                "naam":"Serafina",
-                "uurloon":10
-            }}],
+            [],
             [],
             [],
             [],
@@ -119,10 +98,7 @@ const shifts = {
             []
         ],
         x2027: [
-            [{"dag":"2027","startuur":"1.50","einduur":"5.50","werkgever":{
-                "naam":"Serafina",
-                "uurloon":10
-            }}],
+            [],
             [],
             [],
             [],
