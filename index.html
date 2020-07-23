@@ -1,15 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>My JavaScript App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://bootswatch.com/4/lumen/bootstrap.min.css">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <title>PayCheck</title>
 </head>
+
 <body>
-  <h1>My JavaScript App</h1>
-  <p>This app was compiled using the Babel Webpack Starter Pack which can compile ES2015, ES2016 and ES2017 code including Async/Await</p>
-  
-  <script src="build/app.bundle.js"></script>
+    <div class="row">
+        <!-- Month/Year-Selection -->
+        <div class="col-2 monthNav">
+            <div class="brand">
+                <h1>PayCheck</h1>
+                <hr>
+            </div>
+            <select class="select ml-1 yearSelect">
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+            </select>
+            <div class="monthList">
+                <a href="#" class="jan">Januari</a>
+                <a href="#" class="feb">Februari</a>
+                <a href="#" class="maa">Maart</a>
+                <a href="#" class="apr">April</a>
+                <a href="#" class="mei">Mei</a>
+                <a href="#" class="jun">Juni</a>
+                <a href="#" class="jul">Juli</a>
+                <a href="#" class="aug">Augustus</a>
+                <a href="#" class="sep">September</a>
+                <a href="#" class="okt">Oktober</a>
+                <a href="#" class="nov">November</a>
+                <a href="#" class="dec">December</a>
+            </div>
+        </div>
+        <!-- Main UI -->
+        <div class="col-8 mainUI">
+            <div class="row">
+                <div class="controlContainer">
+                    <div class="card mt-5">
+                        <div class="card-body">
+                            <div class="warning"><p>Gelieve alle velden in te vullen!</p></div>
+                            <h1 class="card-title">Shift invoeren voor <span class="monthOutput"></span></h1>
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label for="dag">Dag</label>
+                                    <select name="dag" id="dag" class="select">
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="29">29</option>
+                                        <option value="30">30</option>
+                                        <option value="31">31</option>
+                                    </select>
+                                    <label for="startuur" class="mt-1">startuur</label>
+                                    <select name="startuur" class="select startuur">
+                                        <option value="24.00">00:00</option>
+                                        <option value="24.25">00:15</option>
+                                        <option value="24.50">00:30</option>
+                                        <option value="24.75">00:45</option>
+                                        <option value="1.00">01:00</option>
+                                        <option value="1.25">01:15</option>
+                                        <option value="1.50">01:30</option>
+                                        <option value="1.75">01:45</option>
+                                        <option value="2.00">02:00</option>
+                                        <option value="2.25">02:15</option>
+                                        <option value="2.50">02:30</option>
+                                        <option value="2.75">02:45</option>
+                                        <option value="3.00">03:00</option>
+                                        <option value="3.25">03:15</option>
+                                        <option value="3.50">03:30</option>
+                                        <option value="3.75">03:45</option>
+                                        <option value="4.00">04:00</option>
+                                        <option value="4.25">04:15</option>
+                                        <option value="4.50">04:30</option>
+                                        <option value="4.75">04:45</option>
+                                        <option value="5.00">05:00</option>
+                                        <option value="5.25">05:15</option>
+                                        <option value="5.50">05:30</option>
+                                        <option value="5.75">05:45</option>
+                                        <option value="6.00">06:00</option>
+                                        <option value="6.25">06:15</option>
+                                        <option value="6.50">06:30</option>
+                                        <option value="6.75">06:45</option>
+                                        <option value="7.00">07:00</option>
+                                        <option value="7.25">07:15</option>
+                                        <option value="7.50">07:30</option>
+                                        <option value="7.75">07:45</option>
+                                        <option value="8.00">08:00</option>
+                                        <option value="8.25">08:15</option>
+                                        <option value="8.50">08:30</option>
+                                        <option value="8.75">08:45</option>
+                                        <option value="9.00">09:00</option>
+                                        <option value="9.25">09:15</option>
+                                        <option value="9.50">09:30</option>
+                                        <option value="9.75">09:45</option>
+                                        <option value="10.00">10:00</option>
+                                        <option value="10.25">10:15</option>
+                                        <option value="10.50">10:30</option>
+                                        <option value="10.75">10:45</option>
+                                        <option value="11.00">11:00</option>
+                                        <option value="11.25">11:15</option>
+                                        <option value="11.50">11:30</option>
+                                        <option value="11.75">11:45</option>
+                                        <option value="12.00">12:00</option>
+                                        <option value="12.25">12:15</option>
+                                        <option value="12.50">12:30</option>
+                                        <option value="12.75">12:45</option>
+                                        <option value="13.00">13:00</option>
+                                        <option value="13.25">13:15</option>
+                                        <option value="13.50">13:30</option>
+                                        <option value="13.75">13:45</option>
+                                        <option value="14.00">14:00</option>
+                                        <option value="14.25">14:15</option>
+                                        <option value="14.50">14:30</option>
+                                        <option value="14.75">14:45</option>
+                                        <option value="15.00">15:00</option>
+                                        <option value="15.25">15:15</option>
+                                        <option value="15.50">15:30</option>
+                                        <option value="15.75">15:45</option>
+                                        <option value="16.00">16:00</option>
+                                        <option value="16.25">16:15</option>
+                                        <option value="16.50">16:30</option>
+                                        <option value="16.75">16:45</option>
+                                        <option value="17.00">17:00</option>
+                                        <option value="17.25">17:15</option>
+                                        <option value="17.50">17:30</option>
+                                        <option value="17.75">17:45</option>
+                                        <option value="18.00">18:00</option>
+                                        <option value="18.25">18:15</option>
+                                        <option value="18.50">18:30</option>
+                                        <option value="18.75">18:45</option>
+                                        <option value="19.00">19:00</option>
+                                        <option value="19.25">19:15</option>
+                                        <option value="19.50">19:30</option>
+                                        <option value="19.75">19:45</option>
+                                        <option value="20.00">20:00</option>
+                                        <option value="20.25">20:15</option>
+                                        <option value="20.50">20:30</option>
+                                        <option value="20.75">20:45</option>
+                                        <option value="21.00">21:00</option>
+                                        <option value="21.25">21:15</option>
+                                        <option value="21.50">21:30</option>
+                                        <option value="21.75">21:45</option>
+                                        <option value="22.00">22:00</option>
+                                        <option value="22.25">22:15</option>
+                                        <option value="22.50">22:30</option>
+                                        <option value="22.75">22:45</option>
+                                        <option value="23.00">23:00</option>
+                                        <option value="23.25">23:15</option>
+                                        <option value="23.50">23:30</option>
+                                        <option value="23.75">23:45</option>
+                                    </select>
+                                    <label for="einduur" class="mt-1">einduur</label>
+                                    <select name="einduur" class="select einduur">
+                                        <option value="24.00">00:00</option>
+                                        <option value="24.25">00:15</option>
+                                        <option value="24.50">00:30</option>
+                                        <option value="24.75">00:45</option>
+                                        <option value="1.00">01:00</option>
+                                        <option value="1.25">01:15</option>
+                                        <option value="1.50">01:30</option>
+                                        <option value="1.75">01:45</option>
+                                        <option value="2.00">02:00</option>
+                                        <option value="2.25">02:15</option>
+                                        <option value="2.50">02:30</option>
+                                        <option value="2.75">02:45</option>
+                                        <option value="3.00">03:00</option>
+                                        <option value="3.25">03:15</option>
+                                        <option value="3.50">03:30</option>
+                                        <option value="3.75">03:45</option>
+                                        <option value="4.00">04:00</option>
+                                        <option value="4.25">04:15</option>
+                                        <option value="4.50">04:30</option>
+                                        <option value="4.75">04:45</option>
+                                        <option value="5.00">05:00</option>
+                                        <option value="5.25">05:15</option>
+                                        <option value="5.50">05:30</option>
+                                        <option value="5.75">05:45</option>
+                                        <option value="6.00">06:00</option>
+                                        <option value="6.25">06:15</option>
+                                        <option value="6.50">06:30</option>
+                                        <option value="6.75">06:45</option>
+                                        <option value="7.00">07:00</option>
+                                        <option value="7.25">07:15</option>
+                                        <option value="7.50">07:30</option>
+                                        <option value="7.75">07:45</option>
+                                        <option value="8.00">08:00</option>
+                                        <option value="8.25">08:15</option>
+                                        <option value="8.50">08:30</option>
+                                        <option value="8.75">08:45</option>
+                                        <option value="9.00">09:00</option>
+                                        <option value="9.25">09:15</option>
+                                        <option value="9.50">09:30</option>
+                                        <option value="9.75">09:45</option>
+                                        <option value="10.00">10:00</option>
+                                        <option value="10.25">10:15</option>
+                                        <option value="10.50">10:30</option>
+                                        <option value="10.75">10:45</option>
+                                        <option value="11.00">11:00</option>
+                                        <option value="11.25">11:15</option>
+                                        <option value="11.50">11:30</option>
+                                        <option value="11.75">11:45</option>
+                                        <option value="12.00">12:00</option>
+                                        <option value="12.25">12:15</option>
+                                        <option value="12.50">12:30</option>
+                                        <option value="12.75">12:45</option>
+                                        <option value="13.00">13:00</option>
+                                        <option value="13.25">13:15</option>
+                                        <option value="13.50">13:30</option>
+                                        <option value="13.75">13:45</option>
+                                        <option value="14.00">14:00</option>
+                                        <option value="14.25">14:15</option>
+                                        <option value="14.50">14:30</option>
+                                        <option value="14.75">14:45</option>
+                                        <option value="15.00">15:00</option>
+                                        <option value="15.25">15:15</option>
+                                        <option value="15.50">15:30</option>
+                                        <option value="15.75">15:45</option>
+                                        <option value="16.00">16:00</option>
+                                        <option value="16.25">16:15</option>
+                                        <option value="16.50">16:30</option>
+                                        <option value="16.75">16:45</option>
+                                        <option value="17.00">17:00</option>
+                                        <option value="17.25">17:15</option>
+                                        <option value="17.50">17:30</option>
+                                        <option value="17.75">17:45</option>
+                                        <option value="18.00">18:00</option>
+                                        <option value="18.25">18:15</option>
+                                        <option value="18.50">18:30</option>
+                                        <option value="18.75">18:45</option>
+                                        <option value="19.00">19:00</option>
+                                        <option value="19.25">19:15</option>
+                                        <option value="19.50">19:30</option>
+                                        <option value="19.75">19:45</option>
+                                        <option value="20.00">20:00</option>
+                                        <option value="20.25">20:15</option>
+                                        <option value="20.50">20:30</option>
+                                        <option value="20.75">20:45</option>
+                                        <option value="21.00">21:00</option>
+                                        <option value="21.25">21:15</option>
+                                        <option value="21.50">21:30</option>
+                                        <option value="21.75">21:45</option>
+                                        <option value="22.00">22:00</option>
+                                        <option value="22.25">22:15</option>
+                                        <option value="22.50">22:30</option>
+                                        <option value="22.75">22:45</option>
+                                        <option value="23.00">23:00</option>
+                                        <option value="23.25">23:15</option>
+                                        <option value="23.50">23:30</option>
+                                        <option value="23.75">23:45</option>
+                                    </select>
+                                </div>
+                                <div class="employerContainer col-6">
+                                    <select id="employerSelect" class="mt-4">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button class="btn btn-primary ml-3 addBtn"><i
+                                            class="fa fa-plus mr-2"></i>Toevoegen</button>
+                                    <button class="btn btn-secondary settingsBtn"><i class="fa fa-gear"></i></button>
+                                </div>
+                            </div>
+                            <div class="row mt-5 settingsContainer">
+                                <div class="col-12">
+                                    <hr>
+                                    <h3>Werkgevers</h3>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input type="text" class="form-control editEmployerName" placeholder="Naam werkgever">
+                                        </div>
+                                        <div class="col-2">
+                                            <input type="number" step="0.01" min="0" class="form-control editEmployerPay" placeholder="Loon">
+                                        </div>
+                                        <div class="col-1">
+                                            <h5>color</h5>
+                                        </div>
+                                        <div class="col-1"></div>
+                                        <div class="col-2">
+                                            <button class="btn btn-primary submitEmployerEdit"><i
+                                                    class="fa fa-pencil"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 offset-3">
+                                            <button class="btn btn-secondary addEmployerBtn"><i
+                                                    class="fa fa-plus mr-2"></i>Werkgever toevoegen</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="dataContainer">
+                    <ul class="shiftOutput">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Statistics -->
+        <div class="col-2 statistics">
+            <h1 class="brand">Statistieken</h1>
+            <hr>
+            <h4>Gepresteerde Uren</h4>
+            <p>Deze maand: <span id="hoursThisMonthOutput"></span></p>
+            <p>Dit jaar: <span id="hoursThisYearOutput"></span></p>
+            <h4>Gepresteerde Dagen</h4>
+            <p>Deze maand: <span id="daysThisMonthOutput"></span></p>
+            <p>Dit jaar: <span id="daysThisYearOutput"></span></p>
+            <h4>Te verwachten verloning</h4>
+            <p>Deze maand: <span id="payThisMonthOutput"></span></p>
+            <p>Dit jaar: <span id="payThisYearOutput"></span></p>
+            <hr>
+
+            <!-- <p>Loon <span id="statistics-currentYear"></span>: <span id="totalPayCurrentYear"></span> (<span id="totalDaysWorkedCurrentYear"></span> Dagen Gewerkt)</p>
+            <p>Loon <span id="statistics-currentMonth"></span>: <span id="totalPayCurrentMonth"></span> (<span id="totalDaysWorkedCurrentMonth"></span> Dagen Gewerkt)</p>
+            <p></p> -->
+        </div>
+    </div>
+    <script src="build/app.bundle.js"></script>
 </body>
+
 </html>
