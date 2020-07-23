@@ -116,12 +116,15 @@ const shifts = {
 const werkgevers = [
     {"naam":"Serafina","uurloon":9.80}
 ]
+let var_currentShiftID = 1;
+
 class Shift {
-    constructor(dag, startuur, einduur, werkgever){
+    constructor(dag, startuur, einduur, werkgever, id){
         this.dag = dag,
         this.startuur = startuur,
         this.einduur = einduur
-        this.werkgever = werkgever
+        this.werkgever = werkgever,
+        this.id = id
     }
 }
 
@@ -133,22 +136,38 @@ class Werkgever {
 }
 
 const dataMethods = {
-    "pushShiftToList": (currentMonth, dag, startuur, einduur, werkgever)=>{
-        const shift = new Shift(dag, startuur, einduur, werkgever);
+    "pushShiftToList": (currentMonth, dag, startuur, einduur, werkgever, id)=>{
+        const shift = new Shift(dag, startuur, einduur, werkgever, id);
         currentMonth.push(shift);
     },
     "pushEmployerToList": (naam, uurloon)=>{
         const werkgever = new Werkgever(naam, uurloon);
         console.log(werkgever);
     },
-    "parseFloatToHourFormat":(hour)=>{
-        let float =  hour;
+    "parseFloatToHourFormat":(float)=>{
         float = float.replace('.00', ':00');
         float = float.replace('.25', ':15');
         float = float.replace('.50', ':30');
         float = float.replace('.75', ':45');
         float = float.replace('24:', '00:');
         return float;
+    },
+    "parseHourToFloatFormat":(hour)=>{
+        hour = hour.replace(':00','.00');
+        hour = hour.replace(':15','.25');
+        hour = hour.replace(':30','.50');
+        hour = hour.replace(':45','.75');
+        hour = hour.replace('00:','24:');
+        return parseFloat(hour);
+    },
+    "iterateCurrentShiftID": () => {
+        let id = var_currentShiftID;
+        id++;
+        var_currentShiftID = id;
+    },
+    "getCurrentShiftID": () => {
+        let id = var_currentShiftID;
+        return id;
     }
 }
 export const shiftsExport = shifts;

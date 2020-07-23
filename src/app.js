@@ -1,4 +1,5 @@
-import {uiMethodsExport} from './uiCtrl'
+import {uiMethodsExport} from './uiCtrl';
+import {dataMethodsExport} from './dataCtrl';
 
 function init(){
     uiMethodsExport.loadEventListeners();

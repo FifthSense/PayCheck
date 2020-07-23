@@ -15,6 +15,8 @@ const uiSelectors = {
             "eindUurInput": document.querySelector('.einduur'),
             "werkgeverSelector": document.querySelector('#employerSelect'),
             "addBtn": document.querySelector('.addBtn'),
+            "editBtn": document.querySelector('.editBtn'),
+            "backBtn": document.querySelector('.backBtn'),
             "settingsBtn": document.querySelector('.settingsBtn'),
             "currentMonthOutput": document.querySelector('.monthOutput'),
             "warning": document.querySelector('.warning')
@@ -52,6 +54,7 @@ const uiMethods = {
         uiSelectors.mainUI.addCard.settingsBtn.addEventListener('click', uiMethods.toggleSettings);
         uiSelectors.mainUI.settingsContainer.submitEmployerEditBtn.addEventListener('click', uiMethods.editEmployer);
         uiSelectors.yearMonthSelection.yearSelection.addEventListener('change', uiMethods.changeYear);
+        uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.enterEditState)
         //Month-Changer
         uiSelectors.yearMonthSelection.monthSelection.januari.addEventListener('click', () => {
             uiMethods.changeMonthIndex(0);
@@ -102,6 +105,21 @@ const uiMethods = {
             uiMethods.changeActiveMonthIndicator();
         });
     },
+    "enterEditState": (e) => {
+        if(e.target.classList.contains('fa-pencil')){
+            uiSelectors.mainUI.addCard.addBtn.style.display = "none";
+            uiSelectors.mainUI.addCard.editBtn.style.display = "inline";
+            uiSelectors.mainUI.addCard.backBtn.style.display = "inline";
+
+            let shiftdate = parseInt(e.target.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild.firstChild.innerText);
+            let shiftstart = dataMethodsExport.parseHourToFloatFormat(e.target.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild.nextElementSibling.firstElementChild.innerText);
+            let shiftend = dataMethodsExport.parseHourToFloatFormat(e.target.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText);
+
+            uiSelectors.mainUI.addCard.dateInput.value = shiftdate;
+            uiSelectors.mainUI.addCard.startUurInput.value = shiftstart;
+            uiSelectors.mainUI.addCard.eindUurInput.value = shiftend;
+        }
+    },
     "toggleSettings": () => {
         if (settingsVisibility === false) {
             settingsVisibility = true;
@@ -115,6 +133,11 @@ const uiMethods = {
         }
         uiMethods.pushCurrentEmployerToSettingsForm();
     },
+    "resetInputValues": () => {
+        uiSelectors.mainUI.addCard.dateInput.value = "1";
+        uiSelectors.mainUI.addCard.startUurInput.value = "24.00";
+        uiSelectors.mainUI.addCard.eindUurInput.value = "24.00";
+    } ,  
     //Employer Controls
     "editEmployer": () => {
         let currentEmployer = uiMethods.getCurrentEmployer();
@@ -155,9 +178,12 @@ const uiMethods = {
         let startuur = uiSelectors.mainUI.addCard.startUurInput.value;
         let einduur = uiSelectors.mainUI.addCard.eindUurInput.value;
         let werkgever = uiMethods.getCurrentEmployer();
+        let id = dataMethodsExport.getCurrentShiftID();
+        dataMethodsExport.iterateCurrentShiftID();
 
-        dataMethodsExport.pushShiftToList(uiMethods.getCurrentMonthArray(currentMonthIndex), date, startuur, einduur, werkgever);
+        dataMethodsExport.pushShiftToList(uiMethods.getCurrentMonthArray(currentMonthIndex), date, startuur, einduur, werkgever, id);
         uiMethods.displayShiftList();
+        uiMethods.resetInputValues();
     },
     "displayShiftList": () => {
         let output = "";
@@ -166,14 +192,13 @@ const uiMethods = {
                 einduur = dataMethodsExport.parseFloatToHourFormat(shift.einduur);
             let totalHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
             let totalPay = (totalHours * shift.werkgever.uurloon).toFixed(2);
-            let title = `${shift.dag} Juli - ${shift.werkgever.naam}`;
             output += `
             <li>
                 <div class="card card-body mt-5">
                     <div class="row">
                     <div class="col-8">
-                        <h3 class="card-title">${title}</h3>
-                        <p>${startuur} - ${einduur}</p>
+                        <h3 class="card-title"><span>${shift.dag}</span><span> ${uiMethods.getCurrentMonth()} ${uiSelectors.yearMonthSelection.yearSelection.value} - ${shift.werkgever.naam}</span></h3>
+                        <p><span>${startuur}</span> - <span>${einduur}</span></p>
                     </div>
                     <div class="col-4">
                         <div class="cardIcons">
@@ -186,6 +211,7 @@ const uiMethods = {
                         <div class="dailyPay">
                             <p>${totalPay} Euro</p>
                         </div>
+                        <div class="shiftID">${shift.id}</div>
                     </div>
                     </div>
                 </div>
@@ -195,6 +221,35 @@ const uiMethods = {
         uiSelectors.mainUI.shiftOutput.innerHTML = output;
     },
     //Date Controls
+    "getCurrentMonth": () => {
+        let currentMonth;
+        if(currentMonthIndex === 0){
+            currentMonth = "januari";
+        } else if(currentMonthIndex === 1){
+            currentMonth = "februari";
+        } else if(currentMonthIndex === 2){
+            currentMonth = "maart";
+        } else if(currentMonthIndex === 3){
+            currentMonth = "april";
+        } else if(currentMonthIndex === 4){
+            currentMonth = "mei";
+        } else if(currentMonthIndex === 5){
+            currentMonth = "juni";
+        } else if(currentMonthIndex === 6){
+            currentMonth = "juli";
+        } else if(currentMonthIndex === 7){
+            currentMonth = "augustus";
+        } else if(currentMonthIndex === 8){
+            currentMonth = "september";
+        } else if(currentMonthIndex === 9){
+            currentMonth = "oktober";
+        } else if(currentMonthIndex === 10){
+            currentMonth = "november";
+        } else if(currentMonthIndex === 11){
+            currentMonth = "december";
+        }
+        return currentMonth;
+    },
     "getCurrentMonthArray": (monthIndex) => {
         let currentMonthArray = currentYearArray[monthIndex];
         return currentMonthArray;
