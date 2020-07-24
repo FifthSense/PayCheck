@@ -3,6 +3,7 @@ import {
     werkgeversExport,
     dataMethodsExport
 } from './dataCtrl';
+
 let settingsVisibility = false;
 let addEmployerContainerVisibility = false;
 let currentYearArray = shiftsExport.x2020;
@@ -73,6 +74,8 @@ const uiMethods = {
         uiSelectors.mainUI.addEmployerContainer.addEmployerSubmit.addEventListener('click', uiMethods.addEmployer);
         uiSelectors.yearMonthSelection.yearSelection.addEventListener('change', uiMethods.changeYear);
         uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.enterEditState);
+        uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.deleteShift);
+
         //Month-Changer
         uiSelectors.yearMonthSelection.monthSelection.januari.addEventListener('click', () => {
             uiMethods.changeMonthIndex(0);
@@ -225,6 +228,7 @@ const uiMethods = {
     },
     //Shift Controls
     "pushShiftToData": () => {
+        if(uiMethods.getCurrentEmployer()){
         let date = uiSelectors.mainUI.addCard.dateInput.value;
         let startuur = uiSelectors.mainUI.addCard.startUurInput.value;
         let einduur = uiSelectors.mainUI.addCard.eindUurInput.value;
@@ -235,6 +239,12 @@ const uiMethods = {
         dataMethodsExport.pushShiftToList(uiMethods.getCurrentMonthArray(currentMonthIndex), date, startuur, einduur, werkgever, id);
         uiMethods.displayShiftList();
         uiMethods.resetInputValues();
+        }else {
+            uiSelectors.mainUI.addCard.warning.style.display = "block";
+            window.setTimeout(()=>{
+                uiSelectors.mainUI.addCard.warning.style.display = "none";
+            },2500);
+        }
     },
     "displayShiftList": () => {
         let output = "";
@@ -284,6 +294,18 @@ const uiMethods = {
         });
         uiMethods.displayShiftList();
         uiMethods.leaveEditState();
+    },
+    "deleteShift": (e) => {
+        let shiftToDeleteID = parseInt(e.target.parentElement.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.innerText);
+        if(e.target.classList.contains('fa-remove')){
+            uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift)=>{
+                if(shift.id === shiftToDeleteID){
+                    let shiftIndex = uiMethods.getCurrentMonthArray(currentMonthIndex).findIndex(i => i.id === shiftToDeleteID);
+                    uiMethods.getCurrentMonthArray(currentMonthIndex).splice(shiftIndex, shiftIndex >= 0 ? 1 : 0);
+                }
+            });
+            uiMethods.displayShiftList();
+        }
     },
     //Date Controls
     "getCurrentMonth": () => {

@@ -114,7 +114,7 @@ const shifts = {
     };
 
 const werkgevers = [
-    {"naam":"Serafina","uurloon":9.80}
+    // {"naam":"Serafina","uurloon":9.80}
 ]
 let var_currentShiftID = 1;
 
@@ -157,7 +157,7 @@ const dataMethods = {
         hour = hour.replace(':15','.25');
         hour = hour.replace(':30','.50');
         hour = hour.replace(':45','.75');
-        hour = hour.replace('00:','24:');
+        hour = hour.replace('00.','24.');
         hour = parseFloat(hour).toFixed(2);
         return hour;
     },
