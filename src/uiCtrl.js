@@ -7,6 +7,7 @@ let settingsVisibility = false;
 let addEmployerContainerVisibility = false;
 let currentYearArray = shiftsExport.x2020;
 let currentMonthIndex = 0;
+let shiftToEditID;
 
 const uiSelectors = {
     "mainUI": {
@@ -20,7 +21,7 @@ const uiSelectors = {
             "backBtn": document.querySelector('.backBtn'),
             "settingsBtn": document.querySelector('.settingsBtn'),
             "addEmployerBtn": document.querySelector('.addEmployerBtn'),
-            "addEmployerBackBtn":document.querySelector('.addEmployerBackBtn'),
+            "addEmployerBackBtn": document.querySelector('.addEmployerBackBtn'),
             "currentMonthOutput": document.querySelector('.monthOutput'),
             "currentYearOutput": document.querySelector('.yearOutput'),
             "warning": document.querySelector('.warning')
@@ -31,12 +32,12 @@ const uiSelectors = {
             "editEmployerPayInput": document.querySelector('.editEmployerPay'),
             "submitEmployerEditBtn": document.querySelector('.submitEmployerEdit'),
         },
-        "addEmployerContainer":{
-            "addEmployerContainer":document.querySelector('.addEmployerContainer'),
-            "addEmployerNameInput":document.querySelector('.addEmployerName'),
-            "addEmployerPayInput":document.querySelector('.addEmployerPay'),
-            "addEmployerSubmit":document.querySelector('.addEmployerSubmit'),
-  
+        "addEmployerContainer": {
+            "addEmployerContainer": document.querySelector('.addEmployerContainer'),
+            "addEmployerNameInput": document.querySelector('.addEmployerName'),
+            "addEmployerPayInput": document.querySelector('.addEmployerPay'),
+            "addEmployerSubmit": document.querySelector('.addEmployerSubmit'),
+
         },
         "shiftOutput": document.querySelector('.shiftOutput')
     },
@@ -63,6 +64,8 @@ const uiMethods = {
         document.addEventListener('DOMContentLoaded', uiMethods.insertCurrentMonth);
         document.addEventListener('DOMContentLoaded', uiMethods.insertCurrentYear);
         uiSelectors.mainUI.addCard.addBtn.addEventListener('click', uiMethods.pushShiftToData);
+        uiSelectors.mainUI.addCard.backBtn.addEventListener('click', uiMethods.leaveEditState);
+        uiSelectors.mainUI.addCard.editBtn.addEventListener('click', uiMethods.editShift);
         uiSelectors.mainUI.addCard.settingsBtn.addEventListener('click', uiMethods.toggleSettings);
         uiSelectors.mainUI.addCard.addEmployerBtn.addEventListener('click', uiMethods.toggleAddEmployerContainer);
         uiSelectors.mainUI.addCard.addEmployerBackBtn.addEventListener('click', uiMethods.toggleAddEmployerContainer);
@@ -121,7 +124,7 @@ const uiMethods = {
         });
     },
     "enterEditState": (e) => {
-        if(e.target.classList.contains('fa-pencil')){
+        if (e.target.classList.contains('fa-pencil')) {
             uiSelectors.mainUI.addCard.addBtn.style.display = "none";
             uiSelectors.mainUI.addCard.editBtn.style.display = "inline";
             uiSelectors.mainUI.addCard.backBtn.style.display = "inline";
@@ -129,11 +132,20 @@ const uiMethods = {
             let shiftdate = parseInt(e.target.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild.firstChild.innerText);
             let shiftstart = dataMethodsExport.parseHourToFloatFormat(e.target.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild.nextElementSibling.firstElementChild.innerText);
             let shiftend = dataMethodsExport.parseHourToFloatFormat(e.target.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText);
+            //Store ID of targeted shift in the designated variable
+            shiftToEditID = e.target.parentElement.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.innerText;
 
             uiSelectors.mainUI.addCard.dateInput.value = shiftdate;
             uiSelectors.mainUI.addCard.startUurInput.value = shiftstart;
             uiSelectors.mainUI.addCard.eindUurInput.value = shiftend;
         }
+    },
+    "leaveEditState": () => {
+        uiSelectors.mainUI.addCard.addBtn.style.display = "inline";
+        uiSelectors.mainUI.addCard.editBtn.style.display = "none";
+        uiSelectors.mainUI.addCard.backBtn.style.display = "none";
+
+        uiMethods.resetInputValues();
     },
     "toggleSettings": () => {
         if (settingsVisibility === false) {
@@ -148,7 +160,7 @@ const uiMethods = {
         }
         uiMethods.pushCurrentEmployerToSettingsForm();
     },
-    "toggleAddEmployerContainer":() => {
+    "toggleAddEmployerContainer": () => {
         if (addEmployerContainerVisibility === false) {
             addEmployerContainerVisibility = true;
         } else if (addEmployerContainerVisibility === true) {
@@ -168,13 +180,13 @@ const uiMethods = {
         uiSelectors.mainUI.addCard.dateInput.value = "1";
         uiSelectors.mainUI.addCard.startUurInput.value = "24.00";
         uiSelectors.mainUI.addCard.eindUurInput.value = "24.00";
-    } ,  
+    },
     //Employer Controls
     "editEmployer": () => {
         let currentEmployer = uiMethods.getCurrentEmployer();
         currentEmployer.naam = uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value;
-        currentEmployer.uurloon = uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value;  
-        
+        currentEmployer.uurloon = uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value;
+
         uiMethods.populateEmployerSelection();
         uiMethods.toggleSettings();
         uiMethods.displayShiftList();
@@ -195,7 +207,7 @@ const uiMethods = {
     "populateEmployerSelection": () => {
         const outputSelect = uiSelectors.mainUI.addCard.werkgeverSelector;
         let html = "";
-        werkgeversExport.forEach((werkgever)=>{
+        werkgeversExport.forEach((werkgever) => {
             html += `
             <option value="${werkgever.naam}">${werkgever.naam}</option>
             `
@@ -259,32 +271,46 @@ const uiMethods = {
 
         uiSelectors.mainUI.shiftOutput.innerHTML = output;
     },
+    "editShift": () => {
+        uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
+            if (parseInt(shiftToEditID) === shift.id) {
+                shift.dag = uiSelectors.mainUI.addCard.dateInput.value;
+                shift.startuur = uiSelectors.mainUI.addCard.startUurInput.value;
+                shift.einduur = uiSelectors.mainUI.addCard.eindUurInput.value;
+                shift.werkgever = uiMethods.getCurrentEmployer();
+                console.log(shift);
+                uiMethods.resetInputValues();
+            }
+        });
+        uiMethods.displayShiftList();
+        uiMethods.leaveEditState();
+    },
     //Date Controls
     "getCurrentMonth": () => {
         let currentMonth;
-        if(currentMonthIndex === 0){
+        if (currentMonthIndex === 0) {
             currentMonth = "januari";
-        } else if(currentMonthIndex === 1){
+        } else if (currentMonthIndex === 1) {
             currentMonth = "februari";
-        } else if(currentMonthIndex === 2){
+        } else if (currentMonthIndex === 2) {
             currentMonth = "maart";
-        } else if(currentMonthIndex === 3){
+        } else if (currentMonthIndex === 3) {
             currentMonth = "april";
-        } else if(currentMonthIndex === 4){
+        } else if (currentMonthIndex === 4) {
             currentMonth = "mei";
-        } else if(currentMonthIndex === 5){
+        } else if (currentMonthIndex === 5) {
             currentMonth = "juni";
-        } else if(currentMonthIndex === 6){
+        } else if (currentMonthIndex === 6) {
             currentMonth = "juli";
-        } else if(currentMonthIndex === 7){
+        } else if (currentMonthIndex === 7) {
             currentMonth = "augustus";
-        } else if(currentMonthIndex === 8){
+        } else if (currentMonthIndex === 8) {
             currentMonth = "september";
-        } else if(currentMonthIndex === 9){
+        } else if (currentMonthIndex === 9) {
             currentMonth = "oktober";
-        } else if(currentMonthIndex === 10){
+        } else if (currentMonthIndex === 10) {
             currentMonth = "november";
-        } else if(currentMonthIndex === 11){
+        } else if (currentMonthIndex === 11) {
             currentMonth = "december";
         }
         return currentMonth;
@@ -300,28 +326,28 @@ const uiMethods = {
     },
     "changeYear": () => {
         const selectedYear = uiSelectors.yearMonthSelection.yearSelection.value;
-        if(selectedYear === "2020"){
+        if (selectedYear === "2020") {
             currentYearArray = shiftsExport.x2020;
-        } else if(selectedYear === "2021"){
+        } else if (selectedYear === "2021") {
             currentYearArray = shiftsExport.x2021;
-        } else if(selectedYear === "2022"){
+        } else if (selectedYear === "2022") {
             currentYearArray = shiftsExport.x2022;
-        } else if(selectedYear === "2023"){
+        } else if (selectedYear === "2023") {
             currentYearArray = shiftsExport.x2023;
-        } else if(selectedYear === "2024"){
+        } else if (selectedYear === "2024") {
             currentYearArray = shiftsExport.x2024;
-        } else if(selectedYear === "2025"){
+        } else if (selectedYear === "2025") {
             currentYearArray = shiftsExport.x2025;
-        } else if(selectedYear === "2026"){
+        } else if (selectedYear === "2026") {
             currentYearArray = shiftsExport.x2026;
-        } else if(selectedYear === "2027"){
+        } else if (selectedYear === "2027") {
             currentYearArray = shiftsExport.x2027;
         }
         uiMethods.displayShiftList();
         uiMethods.insertCurrentYear();
     },
     "changeActiveMonthIndicator": () => {
-        if(currentMonthIndex === 0){
+        if (currentMonthIndex === 0) {
             uiSelectors.yearMonthSelection.monthSelection.januari.id = "active";
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
@@ -334,7 +360,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 1){
+        } else if (currentMonthIndex === 1) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.id = "active";
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
@@ -347,7 +373,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 2){
+        } else if (currentMonthIndex === 2) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.id = "active";
@@ -360,7 +386,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 3){
+        } else if (currentMonthIndex === 3) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
@@ -373,7 +399,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 4){
+        } else if (currentMonthIndex === 4) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
@@ -386,7 +412,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 5){
+        } else if (currentMonthIndex === 5) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
@@ -399,7 +425,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 6){
+        } else if (currentMonthIndex === 6) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
@@ -412,7 +438,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 7){
+        } else if (currentMonthIndex === 7) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
@@ -425,7 +451,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 8){
+        } else if (currentMonthIndex === 8) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
@@ -438,7 +464,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 9){
+        } else if (currentMonthIndex === 9) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
@@ -451,7 +477,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.id = "active";
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 10){
+        } else if (currentMonthIndex === 10) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');
@@ -464,7 +490,7 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.oktober.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.november.id = "active";
             uiSelectors.yearMonthSelection.monthSelection.december.removeAttribute('id');
-        } else if(currentMonthIndex === 11){
+        } else if (currentMonthIndex === 11) {
             uiSelectors.yearMonthSelection.monthSelection.januari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.februari.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.maart.removeAttribute('id');

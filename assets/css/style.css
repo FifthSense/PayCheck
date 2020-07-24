@@ -12,7 +12,9 @@ body{
     margin: 5%;
     color: #486882;
 }
-
+ a:hover{
+     text-decoration: none;
+ }
 .select {
     display: block;
     font-size: 16px;
