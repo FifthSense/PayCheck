@@ -151,17 +151,24 @@ const uiMethods = {
         uiMethods.resetInputValues();
     },
     "toggleSettings": () => {
-        if (settingsVisibility === false) {
-            settingsVisibility = true;
-        } else if (settingsVisibility === true) {
-            settingsVisibility = false;
+        if (uiMethods.getCurrentEmployer()) {
+            if (settingsVisibility === false) {
+                settingsVisibility = true;
+            } else if (settingsVisibility === true) {
+                settingsVisibility = false;
+            }
+            if (settingsVisibility === true) {
+                uiSelectors.mainUI.settingsContainer.settingsContainer.style.display = 'block';
+            } else if (settingsVisibility === false) {
+                uiSelectors.mainUI.settingsContainer.settingsContainer.style.display = 'none';
+            }
+            uiMethods.pushCurrentEmployerToSettingsForm();
+        } else {
+            uiSelectors.mainUI.addCard.warning.style.display = "block";
+            window.setTimeout(() => {
+                uiSelectors.mainUI.addCard.warning.style.display = "none";
+            }, 2500);
         }
-        if (settingsVisibility === true) {
-            uiSelectors.mainUI.settingsContainer.settingsContainer.style.display = 'block';
-        } else if (settingsVisibility === false) {
-            uiSelectors.mainUI.settingsContainer.settingsContainer.style.display = 'none';
-        }
-        uiMethods.pushCurrentEmployerToSettingsForm();
     },
     "toggleAddEmployerContainer": () => {
         if (addEmployerContainerVisibility === false) {
@@ -186,6 +193,7 @@ const uiMethods = {
     },
     //Employer Controls
     "editEmployer": () => {
+        if(uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value !== "" && uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value !== ""){
         let currentEmployer = uiMethods.getCurrentEmployer();
         currentEmployer.naam = uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value;
         currentEmployer.uurloon = uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value;
@@ -193,6 +201,20 @@ const uiMethods = {
         uiMethods.populateEmployerSelection();
         uiMethods.toggleSettings();
         uiMethods.displayShiftList();
+        } else {
+            if(uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value === ""){
+                uiSelectors.mainUI.settingsContainer.editEmployerNameInput.style.borderColor = "red";
+                window.setTimeout(()=>{
+                    uiSelectors.mainUI.settingsContainer.editEmployerNameInput.style.borderColor = "#ced4da";
+                }, 2000);
+            }
+            if(uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value === ""){
+                uiSelectors.mainUI.settingsContainer.editEmployerPayInput.style.borderColor = "red";
+                window.setTimeout(()=>{
+                    uiSelectors.mainUI.settingsContainer.editEmployerPayInput.style.borderColor = "#ced4da";
+                }, 2000);
+            }
+        }
     },
     "getCurrentEmployer": () => {
         let currentWerkgever;
@@ -204,8 +226,15 @@ const uiMethods = {
         return currentWerkgever;
     },
     "pushCurrentEmployerToSettingsForm": () => {
-        uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value = uiMethods.getCurrentEmployer().naam;
-        uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value = uiMethods.getCurrentEmployer().uurloon;
+        if (uiMethods.getCurrentEmployer) {
+            uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value = uiMethods.getCurrentEmployer().naam;
+            uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value = uiMethods.getCurrentEmployer().uurloon;
+        } else {
+            uiSelectors.mainUI.addCard.warning.style.display = "block";
+            window.setTimeout(() => {
+                uiSelectors.mainUI.addCard.warning.style.display = "none";
+            }, 2500);
+        }
     },
     "populateEmployerSelection": () => {
         const outputSelect = uiSelectors.mainUI.addCard.werkgeverSelector;
@@ -221,14 +250,28 @@ const uiMethods = {
     "addEmployer": () => {
         let name = uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value;
         let pay = uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.value;
-        dataMethodsExport.pushEmployerToList(name, pay);
-        uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value = "";
-        uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.value = "";
-        uiMethods.populateEmployerSelection();
+        if (name !== "" && pay !== "") {
+            dataMethodsExport.pushEmployerToList(name, pay);
+            uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value = "";
+            uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.value = "";
+            uiMethods.populateEmployerSelection();
+        } else {
+            if (name === "") {
+                uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.style.borderColor = "red";
+                window.setTimeout(() => {
+                    uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.style.borderColor = "#ced4da";
+                }, 2000);
+            }
+            if (pay === "") {
+                uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.style.borderColor = "red";
+                window.setTimeout(() => {
+                    uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.style.borderColor = "#ced4da";
+                }, 2000);
+            }
+        }
     },
     //Shift Controls
     "pushShiftToData": () => {
-        if(uiMethods.getCurrentEmployer()){
         let date = uiSelectors.mainUI.addCard.dateInput.value;
         let startuur = uiSelectors.mainUI.addCard.startUurInput.value;
         let einduur = uiSelectors.mainUI.addCard.eindUurInput.value;
@@ -239,12 +282,7 @@ const uiMethods = {
         dataMethodsExport.pushShiftToList(uiMethods.getCurrentMonthArray(currentMonthIndex), date, startuur, einduur, werkgever, id);
         uiMethods.displayShiftList();
         uiMethods.resetInputValues();
-        }else {
-            uiSelectors.mainUI.addCard.warning.style.display = "block";
-            window.setTimeout(()=>{
-                uiSelectors.mainUI.addCard.warning.style.display = "none";
-            },2500);
-        }
+
     },
     "displayShiftList": () => {
         let output = "";
@@ -297,9 +335,9 @@ const uiMethods = {
     },
     "deleteShift": (e) => {
         let shiftToDeleteID = parseInt(e.target.parentElement.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.innerText);
-        if(e.target.classList.contains('fa-remove')){
-            uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift)=>{
-                if(shift.id === shiftToDeleteID){
+        if (e.target.classList.contains('fa-remove')) {
+            uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
+                if (shift.id === shiftToDeleteID) {
                     let shiftIndex = uiMethods.getCurrentMonthArray(currentMonthIndex).findIndex(i => i.id === shiftToDeleteID);
                     uiMethods.getCurrentMonthArray(currentMonthIndex).splice(shiftIndex, shiftIndex >= 0 ? 1 : 0);
                 }
