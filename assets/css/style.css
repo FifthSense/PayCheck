@@ -104,7 +104,7 @@ body{
 .shiftOutput{
     list-style-type: none;
 }
-.settingsContainer, .editBtn, .backBtn{
+.settingsContainer, .addEmployerContainer, .editBtn, .backBtn, .addEmployerBackBtn{
     display: none;
 }
 

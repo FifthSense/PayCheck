@@ -142,7 +142,7 @@ const dataMethods = {
     },
     "pushEmployerToList": (naam, uurloon)=>{
         const werkgever = new Werkgever(naam, uurloon);
-        console.log(werkgever);
+        werkgevers.push(werkgever);
     },
     "parseFloatToHourFormat":(float)=>{
         float = float.replace('.00', ':00');
@@ -158,7 +158,8 @@ const dataMethods = {
         hour = hour.replace(':30','.50');
         hour = hour.replace(':45','.75');
         hour = hour.replace('00:','24:');
-        return parseFloat(hour);
+        hour = parseFloat(hour).toFixed(2);
+        return hour;
     },
     "iterateCurrentShiftID": () => {
         let id = var_currentShiftID;

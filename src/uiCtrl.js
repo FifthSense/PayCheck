@@ -4,6 +4,7 @@ import {
     dataMethodsExport
 } from './dataCtrl';
 let settingsVisibility = false;
+let addEmployerContainerVisibility = false;
 let currentYearArray = shiftsExport.x2020;
 let currentMonthIndex = 0;
 
@@ -18,7 +19,10 @@ const uiSelectors = {
             "editBtn": document.querySelector('.editBtn'),
             "backBtn": document.querySelector('.backBtn'),
             "settingsBtn": document.querySelector('.settingsBtn'),
+            "addEmployerBtn": document.querySelector('.addEmployerBtn'),
+            "addEmployerBackBtn":document.querySelector('.addEmployerBackBtn'),
             "currentMonthOutput": document.querySelector('.monthOutput'),
+            "currentYearOutput": document.querySelector('.yearOutput'),
             "warning": document.querySelector('.warning')
         },
         "settingsContainer": {
@@ -26,7 +30,13 @@ const uiSelectors = {
             "editEmployerNameInput": document.querySelector('.editEmployerName'),
             "editEmployerPayInput": document.querySelector('.editEmployerPay'),
             "submitEmployerEditBtn": document.querySelector('.submitEmployerEdit'),
-            "addEmployerBtn": document.querySelector('.addEmployerBtn')
+        },
+        "addEmployerContainer":{
+            "addEmployerContainer":document.querySelector('.addEmployerContainer'),
+            "addEmployerNameInput":document.querySelector('.addEmployerName'),
+            "addEmployerPayInput":document.querySelector('.addEmployerPay'),
+            "addEmployerSubmit":document.querySelector('.addEmployerSubmit'),
+  
         },
         "shiftOutput": document.querySelector('.shiftOutput')
     },
@@ -50,11 +60,16 @@ const uiSelectors = {
 }
 const uiMethods = {
     "loadEventListeners": () => {
+        document.addEventListener('DOMContentLoaded', uiMethods.insertCurrentMonth);
+        document.addEventListener('DOMContentLoaded', uiMethods.insertCurrentYear);
         uiSelectors.mainUI.addCard.addBtn.addEventListener('click', uiMethods.pushShiftToData);
         uiSelectors.mainUI.addCard.settingsBtn.addEventListener('click', uiMethods.toggleSettings);
+        uiSelectors.mainUI.addCard.addEmployerBtn.addEventListener('click', uiMethods.toggleAddEmployerContainer);
+        uiSelectors.mainUI.addCard.addEmployerBackBtn.addEventListener('click', uiMethods.toggleAddEmployerContainer);
         uiSelectors.mainUI.settingsContainer.submitEmployerEditBtn.addEventListener('click', uiMethods.editEmployer);
+        uiSelectors.mainUI.addEmployerContainer.addEmployerSubmit.addEventListener('click', uiMethods.addEmployer);
         uiSelectors.yearMonthSelection.yearSelection.addEventListener('change', uiMethods.changeYear);
-        uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.enterEditState)
+        uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.enterEditState);
         //Month-Changer
         uiSelectors.yearMonthSelection.monthSelection.januari.addEventListener('click', () => {
             uiMethods.changeMonthIndex(0);
@@ -133,6 +148,22 @@ const uiMethods = {
         }
         uiMethods.pushCurrentEmployerToSettingsForm();
     },
+    "toggleAddEmployerContainer":() => {
+        if (addEmployerContainerVisibility === false) {
+            addEmployerContainerVisibility = true;
+        } else if (addEmployerContainerVisibility === true) {
+            addEmployerContainerVisibility = false;
+        }
+        if (addEmployerContainerVisibility === true) {
+            uiSelectors.mainUI.addEmployerContainer.addEmployerContainer.style.display = 'block';
+            uiSelectors.mainUI.addCard.addEmployerBackBtn.style.display = "block";
+            uiSelectors.mainUI.addCard.addEmployerBtn.style.display = "none";
+        } else if (addEmployerContainerVisibility === false) {
+            uiSelectors.mainUI.addEmployerContainer.addEmployerContainer.style.display = 'none';
+            uiSelectors.mainUI.addCard.addEmployerBackBtn.style.display = "none";
+            uiSelectors.mainUI.addCard.addEmployerBtn.style.display = "block";
+        }
+    },
     "resetInputValues": () => {
         uiSelectors.mainUI.addCard.dateInput.value = "1";
         uiSelectors.mainUI.addCard.startUurInput.value = "24.00";
@@ -171,6 +202,14 @@ const uiMethods = {
         });
 
         outputSelect.innerHTML = html;
+    },
+    "addEmployer": () => {
+        let name = uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value;
+        let pay = uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.value;
+        dataMethodsExport.pushEmployerToList(name, pay);
+        uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value = "";
+        uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.value = "";
+        uiMethods.populateEmployerSelection();
     },
     //Shift Controls
     "pushShiftToData": () => {
@@ -257,6 +296,7 @@ const uiMethods = {
     "changeMonthIndex": (newMonthIndex) => {
         currentMonthIndex = newMonthIndex;
         uiMethods.displayShiftList();
+        uiMethods.insertCurrentMonth();
     },
     "changeYear": () => {
         const selectedYear = uiSelectors.yearMonthSelection.yearSelection.value;
@@ -278,6 +318,7 @@ const uiMethods = {
             currentYearArray = shiftsExport.x2027;
         }
         uiMethods.displayShiftList();
+        uiMethods.insertCurrentYear();
     },
     "changeActiveMonthIndicator": () => {
         if(currentMonthIndex === 0){
@@ -437,6 +478,12 @@ const uiMethods = {
             uiSelectors.yearMonthSelection.monthSelection.november.removeAttribute('id');
             uiSelectors.yearMonthSelection.monthSelection.december.id = "active";
         }
+    },
+    "insertCurrentMonth": () => {
+        uiSelectors.mainUI.addCard.currentMonthOutput.innerHTML = uiMethods.getCurrentMonth();
+    },
+    "insertCurrentYear": () => {
+        uiSelectors.mainUI.addCard.currentYearOutput.innerHTML = uiSelectors.yearMonthSelection.yearSelection.value;
     }
 }
 
