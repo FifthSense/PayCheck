@@ -65,7 +65,8 @@ const uiSelectors = {
         "monthlyShifts": document.querySelector('#daysThisMonthOutput'),
         "yearlyShifts": document.querySelector('#daysThisYearOutput'),
         "monthlyPay": document.querySelector('#payThisMonthOutput'),
-        "yearlyPay": document.querySelector('#payThisYearOutput')
+        "yearlyPay": document.querySelector('#payThisYearOutput'),
+        "werkgeverSelector": document.querySelector('.statistiekenWerkgeverSelect')
     }
 }
 const uiMethods = {
@@ -84,7 +85,7 @@ const uiMethods = {
         uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.enterEditState);
         uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.deleteShift);
         uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.displayMonthlyHours);
-
+        uiSelectors.statistics.werkgeverSelector.addEventListener('change', uiMethods.populateStatistics);
         //Month-Changer
         uiSelectors.yearMonthSelection.monthSelection.januari.addEventListener('click', () => {
             uiMethods.changeMonthIndex(0);
@@ -202,24 +203,24 @@ const uiMethods = {
     },
     //Employer Controls
     "editEmployer": () => {
-        if(uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value !== "" && uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value !== ""){
-        let currentEmployer = uiMethods.getCurrentEmployer();
-        currentEmployer.naam = uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value;
-        currentEmployer.uurloon = uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value;
+        if (uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value !== "" && uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value !== "") {
+            let currentEmployer = uiMethods.getCurrentEmployer();
+            currentEmployer.naam = uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value;
+            currentEmployer.uurloon = uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value;
 
-        uiMethods.populateEmployerSelection();
-        uiMethods.toggleSettings();
-        uiMethods.displayShiftList();
+            uiMethods.populateEmployerSelection();
+            uiMethods.toggleSettings();
+            uiMethods.displayShiftList();
         } else {
-            if(uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value === ""){
+            if (uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value === "") {
                 uiSelectors.mainUI.settingsContainer.editEmployerNameInput.style.borderColor = "red";
-                window.setTimeout(()=>{
+                window.setTimeout(() => {
                     uiSelectors.mainUI.settingsContainer.editEmployerNameInput.style.borderColor = "#ced4da";
                 }, 2000);
             }
-            if(uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value === ""){
+            if (uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value === "") {
                 uiSelectors.mainUI.settingsContainer.editEmployerPayInput.style.borderColor = "red";
-                window.setTimeout(()=>{
+                window.setTimeout(() => {
                     uiSelectors.mainUI.settingsContainer.editEmployerPayInput.style.borderColor = "#ced4da";
                 }, 2000);
             }
@@ -246,15 +247,28 @@ const uiMethods = {
         }
     },
     "populateEmployerSelection": () => {
-        const outputSelect = uiSelectors.mainUI.addCard.werkgeverSelector;
         let html = "";
         werkgeversExport.forEach((werkgever) => {
             html += `
             <option value="${werkgever.naam}">${werkgever.naam}</option>
             `
         });
-
-        outputSelect.innerHTML = html;
+        uiSelectors.mainUI.addCard.werkgeverSelector.innerHTML = html;
+    },
+    "populateStatisticsEmployerSelection": () => {
+        let html = "";
+        werkgeversExport.forEach((werkgever) => {
+            html += `
+                <option value="${werkgever.naam}">${werkgever.naam}</option>
+                `
+        });
+        uiSelectors.statistics.werkgeverSelector.innerHTML += html;
+    },
+    "addEmployerToStatisticsSelection": (naam) => {
+        let option = document.createElement('option');
+        option.value = naam;
+        option.innerHTML = naam;
+        uiSelectors.statistics.werkgeverSelector.appendChild(option);
     },
     "addEmployer": () => {
         let name = uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value;
@@ -264,6 +278,7 @@ const uiMethods = {
             uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value = "";
             uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.value = "";
             uiMethods.populateEmployerSelection();
+            uiMethods.addEmployerToStatisticsSelection(name);
         } else {
             if (name === "") {
                 uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.style.borderColor = "red";
@@ -285,13 +300,13 @@ const uiMethods = {
         let startuur = uiSelectors.mainUI.addCard.startUurInput.value;
         let einduur = uiSelectors.mainUI.addCard.eindUurInput.value;
         let werkgever = uiMethods.getCurrentEmployer();
-        if(werkgever){
-        let id = dataMethodsExport.getCurrentShiftID();
-        dataMethodsExport.iterateCurrentShiftID();
+        if (werkgever) {
+            let id = dataMethodsExport.getCurrentShiftID();
+            dataMethodsExport.iterateCurrentShiftID();
 
-        dataMethodsExport.pushShiftToList(uiMethods.getCurrentMonthArray(currentMonthIndex), date, startuur, einduur, werkgever, id);
-        uiMethods.displayShiftList();
-        uiMethods.resetInputValues();
+            dataMethodsExport.pushShiftToList(uiMethods.getCurrentMonthArray(currentMonthIndex), date, startuur, einduur, werkgever, id);
+            uiMethods.displayShiftList();
+            uiMethods.resetInputValues();
         } else {
             uiSelectors.mainUI.addCard.warning.style.display = "block";
             window.setTimeout(() => {
@@ -330,12 +345,8 @@ const uiMethods = {
                 </div>
             </li>`
         });
-        uiMethods.displayMonthlyHours();
-        uiMethods.displayYearlyHours();
-        uiMethods.displayMonthlyAmountOfShifts();
-        uiMethods.displayYearlyAmountOfShifts();
-        uiMethods.displayMonthlyPay();
-        uiMethods.displayYearlyPay();
+
+        uiMethods.populateStatistics();
         uiSelectors.mainUI.shiftOutput.innerHTML = output;
     },
     "editShift": () => {
@@ -366,33 +377,64 @@ const uiMethods = {
     },
     "displayMonthlyHours": () => {
         let totalhours = 0;
-        uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift)=>{
-            let dailyHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
-            totalhours += dailyHours;
-        });
+        if (uiSelectors.statistics.werkgeverSelector.value === "all") {
+            uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
+                let dailyHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
+                totalhours += dailyHours;
+            });
+        } else {
+            uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
+                if (shift.werkgever.naam === uiSelectors.statistics.werkgeverSelector.value) {
+                    let dailyHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
+                    totalhours += dailyHours;
+                }
+            });
+        }
         uiSelectors.statistics.monthlyHoursOutput.innerHTML = totalhours;
     },
     "displayYearlyHours": () => {
         let totalHours = 0;
-        currentYearArray.forEach((month) => {
-            let monthlyHours = 0;
-            month.forEach((shift) => {
-                let dailyHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
-                monthlyHours += dailyHours;
+        if (uiSelectors.statistics.werkgeverSelector.value === "all") {
+            currentYearArray.forEach((month) => {
+                let monthlyHours = 0;
+                month.forEach((shift) => {
+                    let dailyHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
+                    monthlyHours += dailyHours;
+                });
+                totalHours += monthlyHours;
             });
-            totalHours += monthlyHours;
-        });
+        } else {
+            currentYearArray.forEach((month) => {
+                let monthlyHours = 0;
+                month.forEach((shift) => {
+                    if (shift.werkgever.naam === uiSelectors.statistics.werkgeverSelector.value) {
+                        let dailyHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
+                        monthlyHours += dailyHours;
+                    }
+                });
+                totalHours += monthlyHours;
+            });
+        }
         uiSelectors.statistics.yearlyHoursOutput.innerHTML = totalHours;
     },
     "displayMonthlyAmountOfShifts": () => {
         let totalShifts = 0;
-        uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
-            totalShifts++;
-        });
+        if (uiSelectors.statistics.werkgeverSelector.value === "all") {
+            uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
+                totalShifts++;
+            });
+        } else {
+                uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
+                    if (shift.werkgever.naam === uiSelectors.statistics.werkgeverSelector.value) {
+                    totalShifts++;
+                    }
+                });
+        }
         uiSelectors.statistics.monthlyShifts.innerHTML = totalShifts;
     },
     "displayYearlyAmountOfShifts": () => {
         let totalShifts = 0;
+        if (uiSelectors.statistics.werkgeverSelector.value === "all") {
         currentYearArray.forEach((month) => {
             let monthlyShifts = 0;
             month.forEach((shift) => {
@@ -400,26 +442,65 @@ const uiMethods = {
             });
             totalShifts += monthlyShifts;
         });
+    } else {
+            currentYearArray.forEach((month) => {
+                
+                let monthlyShifts = 0;
+                month.forEach((shift) => {
+                    if (shift.werkgever.naam === uiSelectors.statistics.werkgeverSelector.value) {
+                    monthlyShifts++
+                    }
+                });
+                totalShifts += monthlyShifts;
+            });   
+    }
         uiSelectors.statistics.yearlyShifts.innerHTML = totalShifts;
     },
     "displayMonthlyPay": () => {
         let totalPay = 0;
-        uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift)=>{
+        if (uiSelectors.statistics.werkgeverSelector.value === "all") {
+        uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
             totalPay += parseFloat(shift.totalPay);
         });
-
+    } else {
+            uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
+                if (shift.werkgever.naam === uiSelectors.statistics.werkgeverSelector.value) {
+                totalPay += parseFloat(shift.totalPay);
+                }
+            });
+    }
         uiSelectors.statistics.monthlyPay.innerHTML = totalPay.toFixed(2);
     },
     "displayYearlyPay": () => {
         let totalPay = 0;
-        currentYearArray.forEach((month)=>{
+        if (uiSelectors.statistics.werkgeverSelector.value === "all") {
+        currentYearArray.forEach((month) => {
             let monthlyPay = 0;
-            month.forEach((shift)=>{
+            month.forEach((shift) => {
                 monthlyPay += parseFloat(shift.totalPay);
             });
             totalPay += parseFloat(monthlyPay);
         });
+        } else {
+            currentYearArray.forEach((month) => {
+                let monthlyPay = 0;
+                month.forEach((shift) => {
+                    if (shift.werkgever.naam === uiSelectors.statistics.werkgeverSelector.value) {
+                    monthlyPay += parseFloat(shift.totalPay);
+                    }
+                });
+                totalPay += parseFloat(monthlyPay);
+            });
+        }
         uiSelectors.statistics.yearlyPay.innerHTML = totalPay.toFixed(2);
+    },
+    "populateStatistics": () => {
+        uiMethods.displayMonthlyHours();
+        uiMethods.displayYearlyHours();
+        uiMethods.displayMonthlyAmountOfShifts();
+        uiMethods.displayYearlyAmountOfShifts();
+        uiMethods.displayMonthlyPay();
+        uiMethods.displayYearlyPay();
     },
     //Date Controls
     "getCurrentMonth": () => {
