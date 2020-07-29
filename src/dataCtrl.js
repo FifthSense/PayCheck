@@ -124,7 +124,8 @@ class Shift {
         this.startuur = startuur,
         this.einduur = einduur
         this.werkgever = werkgever,
-        this.id = id
+        this.id = id,
+        this.totalPay = ((parseFloat(einduur) - parseFloat(startuur)) * parseFloat(werkgever.uurloon)).toFixed(2)
     }
 }
 

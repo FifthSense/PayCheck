@@ -58,6 +58,14 @@ const uiSelectors = {
             "november": document.querySelector('.nov'),
             "december": document.querySelector('.dec')
         }
+    },
+    "statistics": {
+        "monthlyHoursOutput": document.querySelector('#hoursThisMonthOutput'),
+        "yearlyHoursOutput": document.querySelector('#hoursThisYearOutput'),
+        "monthlyShifts": document.querySelector('#daysThisMonthOutput'),
+        "yearlyShifts": document.querySelector('#daysThisYearOutput'),
+        "monthlyPay": document.querySelector('#payThisMonthOutput'),
+        "yearlyPay": document.querySelector('#payThisYearOutput')
     }
 }
 const uiMethods = {
@@ -75,6 +83,7 @@ const uiMethods = {
         uiSelectors.yearMonthSelection.yearSelection.addEventListener('change', uiMethods.changeYear);
         uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.enterEditState);
         uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.deleteShift);
+        uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.displayMonthlyHours);
 
         //Month-Changer
         uiSelectors.yearMonthSelection.monthSelection.januari.addEventListener('click', () => {
@@ -276,13 +285,19 @@ const uiMethods = {
         let startuur = uiSelectors.mainUI.addCard.startUurInput.value;
         let einduur = uiSelectors.mainUI.addCard.eindUurInput.value;
         let werkgever = uiMethods.getCurrentEmployer();
+        if(werkgever){
         let id = dataMethodsExport.getCurrentShiftID();
         dataMethodsExport.iterateCurrentShiftID();
 
         dataMethodsExport.pushShiftToList(uiMethods.getCurrentMonthArray(currentMonthIndex), date, startuur, einduur, werkgever, id);
         uiMethods.displayShiftList();
         uiMethods.resetInputValues();
-
+        } else {
+            uiSelectors.mainUI.addCard.warning.style.display = "block";
+            window.setTimeout(() => {
+                uiSelectors.mainUI.addCard.warning.style.display = "none";
+            }, 2500);
+        }
     },
     "displayShiftList": () => {
         let output = "";
@@ -290,7 +305,6 @@ const uiMethods = {
             let startuur = dataMethodsExport.parseFloatToHourFormat(shift.startuur),
                 einduur = dataMethodsExport.parseFloatToHourFormat(shift.einduur);
             let totalHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
-            let totalPay = (totalHours * shift.werkgever.uurloon).toFixed(2);
             output += `
             <li>
                 <div class="card card-body mt-5">
@@ -308,7 +322,7 @@ const uiMethods = {
                             <p>${totalHours} Uren</p>
                         </div>
                         <div class="dailyPay">
-                            <p>${totalPay} Euro</p>
+                            <p>${shift.totalPay} Euro</p>
                         </div>
                         <div class="shiftID">${shift.id}</div>
                     </div>
@@ -316,7 +330,12 @@ const uiMethods = {
                 </div>
             </li>`
         });
-
+        uiMethods.displayMonthlyHours();
+        uiMethods.displayYearlyHours();
+        uiMethods.displayMonthlyAmountOfShifts();
+        uiMethods.displayYearlyAmountOfShifts();
+        uiMethods.displayMonthlyPay();
+        uiMethods.displayYearlyPay();
         uiSelectors.mainUI.shiftOutput.innerHTML = output;
     },
     "editShift": () => {
@@ -334,8 +353,8 @@ const uiMethods = {
         uiMethods.leaveEditState();
     },
     "deleteShift": (e) => {
-        let shiftToDeleteID = parseInt(e.target.parentElement.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.innerText);
         if (e.target.classList.contains('fa-remove')) {
+            let shiftToDeleteID = parseInt(e.target.parentElement.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.innerText);
             uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
                 if (shift.id === shiftToDeleteID) {
                     let shiftIndex = uiMethods.getCurrentMonthArray(currentMonthIndex).findIndex(i => i.id === shiftToDeleteID);
@@ -344,6 +363,63 @@ const uiMethods = {
             });
             uiMethods.displayShiftList();
         }
+    },
+    "displayMonthlyHours": () => {
+        let totalhours = 0;
+        uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift)=>{
+            let dailyHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
+            totalhours += dailyHours;
+        });
+        uiSelectors.statistics.monthlyHoursOutput.innerHTML = totalhours;
+    },
+    "displayYearlyHours": () => {
+        let totalHours = 0;
+        currentYearArray.forEach((month) => {
+            let monthlyHours = 0;
+            month.forEach((shift) => {
+                let dailyHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
+                monthlyHours += dailyHours;
+            });
+            totalHours += monthlyHours;
+        });
+        uiSelectors.statistics.yearlyHoursOutput.innerHTML = totalHours;
+    },
+    "displayMonthlyAmountOfShifts": () => {
+        let totalShifts = 0;
+        uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
+            totalShifts++;
+        });
+        uiSelectors.statistics.monthlyShifts.innerHTML = totalShifts;
+    },
+    "displayYearlyAmountOfShifts": () => {
+        let totalShifts = 0;
+        currentYearArray.forEach((month) => {
+            let monthlyShifts = 0;
+            month.forEach((shift) => {
+                monthlyShifts++
+            });
+            totalShifts += monthlyShifts;
+        });
+        uiSelectors.statistics.yearlyShifts.innerHTML = totalShifts;
+    },
+    "displayMonthlyPay": () => {
+        let totalPay = 0;
+        uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift)=>{
+            totalPay += parseFloat(shift.totalPay);
+        });
+
+        uiSelectors.statistics.monthlyPay.innerHTML = totalPay.toFixed(2);
+    },
+    "displayYearlyPay": () => {
+        let totalPay = 0;
+        currentYearArray.forEach((month)=>{
+            let monthlyPay = 0;
+            month.forEach((shift)=>{
+                monthlyPay += parseFloat(shift.totalPay);
+            });
+            totalPay += parseFloat(monthlyPay);
+        });
+        uiSelectors.statistics.yearlyPay.innerHTML = totalPay.toFixed(2);
     },
     //Date Controls
     "getCurrentMonth": () => {
