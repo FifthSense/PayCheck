@@ -31,14 +31,15 @@ const uiSelectors = {
             "settingsContainer": document.querySelector('.settingsContainer'),
             "editEmployerNameInput": document.querySelector('.editEmployerName'),
             "editEmployerPayInput": document.querySelector('.editEmployerPay'),
-            "submitEmployerEditBtn": document.querySelector('.submitEmployerEdit'),
+            "editEmployerColorInput": document.querySelector('.editEmployerColor'),
+            "submitEmployerEditBtn": document.querySelector('.submitEmployerEdit')
         },
         "addEmployerContainer": {
             "addEmployerContainer": document.querySelector('.addEmployerContainer'),
             "addEmployerNameInput": document.querySelector('.addEmployerName'),
             "addEmployerPayInput": document.querySelector('.addEmployerPay'),
-            "addEmployerSubmit": document.querySelector('.addEmployerSubmit'),
-
+            "addEmployerColorInput": document.querySelector('.addEmployerColor'),
+            "addEmployerSubmit": document.querySelector('.addEmployerSubmit')
         },
         "shiftOutput": document.querySelector('.shiftOutput')
     },
@@ -84,7 +85,8 @@ const uiMethods = {
         uiSelectors.yearMonthSelection.yearSelection.addEventListener('change', uiMethods.changeYear);
         uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.enterEditState);
         uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.deleteShift);
-        uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.displayMonthlyHours);
+        uiSelectors.mainUI.shiftOutput.addEventListener('click', dataMethodsExport.logShiftData);
+        uiSelectors.mainUI.shiftOutput.addEventListener('click', dataMethodsExport.logEmployerData);
         uiSelectors.statistics.werkgeverSelector.addEventListener('change', uiMethods.populateStatistics);
         //Month-Changer
         uiSelectors.yearMonthSelection.monthSelection.januari.addEventListener('click', () => {
@@ -203,23 +205,31 @@ const uiMethods = {
     },
     //Employer Controls
     "editEmployer": () => {
-        if (uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value !== "" && uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value !== "") {
+        let naam = uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value, uurloon = uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value, color = uiSelectors.mainUI.settingsContainer.editEmployerColorInput.value;
+        if (naam !== "" && uurloon !== "" && color !== "") {
             let currentEmployer = uiMethods.getCurrentEmployer();
-            currentEmployer.naam = uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value;
-            currentEmployer.uurloon = uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value;
+            currentEmployer.naam = naam;
+            currentEmployer.uurloon = uurloon;
+            currentEmployer.color = color;
 
             uiMethods.populateEmployerSelection();
             uiMethods.toggleSettings();
             uiMethods.displayShiftList();
         } else {
-            if (uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value === "") {
+            if (naam === "") {
                 uiSelectors.mainUI.settingsContainer.editEmployerNameInput.style.borderColor = "red";
                 window.setTimeout(() => {
                     uiSelectors.mainUI.settingsContainer.editEmployerNameInput.style.borderColor = "#ced4da";
                 }, 2000);
             }
-            if (uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value === "") {
+            if (uurloon === "") {
                 uiSelectors.mainUI.settingsContainer.editEmployerPayInput.style.borderColor = "red";
+                window.setTimeout(() => {
+                    uiSelectors.mainUI.settingsContainer.editEmployerPayInput.style.borderColor = "#ced4da";
+                }, 2000);
+            }
+            if (color === "") {
+                uiSelectors.mainUI.settingsContainer.editEmployerColorInput.style.borderColor = "red";
                 window.setTimeout(() => {
                     uiSelectors.mainUI.settingsContainer.editEmployerPayInput.style.borderColor = "#ced4da";
                 }, 2000);
@@ -273,10 +283,12 @@ const uiMethods = {
     "addEmployer": () => {
         let name = uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value;
         let pay = uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.value;
-        if (name !== "" && pay !== "") {
-            dataMethodsExport.pushEmployerToList(name, pay);
+        let color = uiSelectors.mainUI.addEmployerContainer.addEmployerColorInput.value;
+        if (name !== "" && pay !== "" && color !== "") {
+            dataMethodsExport.pushEmployerToList(name, pay, color);
             uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value = "";
             uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.value = "";
+            uiSelectors.mainUI.addEmployerContainer.addEmployerColorInput.value = "#ff0000";
             uiMethods.populateEmployerSelection();
             uiMethods.addEmployerToStatisticsSelection(name);
         } else {
@@ -318,11 +330,12 @@ const uiMethods = {
         let output = "";
         uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
             let startuur = dataMethodsExport.parseFloatToHourFormat(shift.startuur),
-                einduur = dataMethodsExport.parseFloatToHourFormat(shift.einduur);
-            let totalHours = parseFloat(shift.einduur) - parseFloat(shift.startuur);
+                einduur = dataMethodsExport.parseFloatToHourFormat(shift.einduur),
+                totalHours = parseFloat(shift.einduur) - parseFloat(shift.startuur),
+                color = shift.werkgever.color;
             output += `
             <li>
-                <div class="card card-body mt-5">
+                <div style="border-left:solid 20px ${color}" class="card card-body mt-1 mb-2">
                     <div class="row">
                     <div class="col-8">
                         <h3 class="card-title"><span>${shift.dag}</span><span> ${uiMethods.getCurrentMonth()} ${uiSelectors.yearMonthSelection.yearSelection.value} - ${shift.werkgever.naam}</span></h3>

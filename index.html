@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <div class="row">
+    <div class="row main">
         <!-- Month/Year-Selection -->
         <div class="col-2 monthNav">
             <div class="brand">
@@ -49,16 +49,16 @@
             </div>
         </div>
         <!-- Main UI -->
-        <div class="col-8 mainUI">
+        <div class="col-8 mainUI overflow-auto">
             <div class="row">
                 <div class="controlContainer">
-                    <div class="card mt-5">
+                    <div class="card">
                         <div class="card-body">
                             <div class="warning"><p><i class="fa fa-exclamation-circle mr-3"></i>Gelieve eerst een werkgever in the geven</p></div>
                             <h1 class="card-title">Shift invoeren voor <span class="monthOutput"></span> <span class="yearOutput"></span></h1>
                             <div class="row">
                                 <div class="form-group col-6">
-                                    <label for="dag">Dag</label>
+                                    <label for="dag" class="ml-2">Dag</label>
                                     <select name="dag" id="dag" class="select">
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -92,7 +92,7 @@
                                         <option value="30">30</option>
                                         <option value="31">31</option>
                                     </select>
-                                    <label for="startuur" class="mt-1">startuur</label>
+                                    <label for="startuur" class="mt-1 ml-2">startuur</label>
                                     <select name="startuur" class="select startuur">
                                         <option value="24.00">00:00</option>
                                         <option value="24.25">00:15</option>
@@ -191,7 +191,7 @@
                                         <option value="23.50">23:30</option>
                                         <option value="23.75">23:45</option>
                                     </select>
-                                    <label for="einduur" class="mt-1">einduur</label>
+                                    <label for="einduur" class="mt-1 ml-2">einduur</label>
                                     <select name="einduur" class="select einduur">
                                         <option value="24.00">00:00</option>
                                         <option value="24.25">00:15</option>
@@ -292,9 +292,10 @@
                                     </select>
                                 </div>
                                 <div class="employerContainer col-6">
-                                    <select id="employerSelect" class="mt-4">
+                                    <label for="employerselect" class="ml-2">Werknemer</label>
+                                    <select id="employerSelect" name="employerselect">
                                     </select>
-                                    <button class="btn btn-secondary settingsBtn mt-3 ml-1"><i class="fa fa-gear mr-1"></i>Werknemerinstellingen</button>
+                                    <button class="btn btn-secondary settingsBtn mt-3 ml-1"><i class="fa fa-gear mr-1"></i>Werkgeverinstellingen</button>
                                     <button class="btn btn-primary addEmployerBtn mt-3 ml-1"><i class="fa fa-plus mr-1"></i>Werkgever Toevoegen</button>
                                     <button class="btn btn-secondary addEmployerBackBtn mt-3 ml-1"><i class="fa fa-chevron-left mr-1"></i>Terug</button>
                                 </div>
@@ -312,7 +313,7 @@
                             <div class="row mt-5 settingsContainer">
                                 <div class="col-12">
                                     <hr>
-                                    <h3>Werkgevers</h3>
+                                    <h3>Werkgever Aanpassen</h3>
                                     <div class="row">
                                         <div class="col-6">
                                             <input type="text" class="form-control editEmployerName" placeholder="Naam werkgever">
@@ -321,7 +322,7 @@
                                             <input type="number" step="0.01" min="0" class="form-control editEmployerPay" placeholder="Loon">
                                         </div>
                                         <div class="col-1">
-                                            <input type="color" value="#ff0000" class="mt-1">
+                                            <input type="color" value="#ff0000" class="mt-1 editEmployerColor">
                                         </div>
                                         <div class="col-2 offset-1">
                                             <button class="btn btn-primary submitEmployerEdit"><i
@@ -342,7 +343,7 @@
                                             <input type="number" step="0.01" min="0" class="form-control addEmployerPay" placeholder="Loon">
                                         </div>
                                         <div class="col-1">
-                                            <input type="color" value="#ff0000" class="mt-1">
+                                            <input type="color" value="#ff0000" class="mt-1 addEmployerColor">
                                         </div>
                                         <div class="col-2 offset-1">
                                             <button class="btn btn-primary addEmployerSubmit"><i

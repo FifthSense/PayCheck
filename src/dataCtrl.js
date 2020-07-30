@@ -113,9 +113,7 @@ const shifts = {
         ]
     };
 
-const werkgevers = [
-    // {"naam":"Serafina","uurloon":9.80}
-]
+const werkgevers = []
 let var_currentShiftID = 1;
 
 class Shift {
@@ -130,9 +128,10 @@ class Shift {
 }
 
 class Werkgever {
-    constructor(naam, uurloon){
+    constructor(naam, uurloon, color){
         this.naam = naam,
-        this.uurloon = uurloon
+        this.uurloon = uurloon,
+        this.color = color
     }
 }
 
@@ -141,8 +140,8 @@ const dataMethods = {
         const shift = new Shift(dag, startuur, einduur, werkgever, id);
         currentMonth.push(shift);
     },
-    "pushEmployerToList": (naam, uurloon)=>{
-        const werkgever = new Werkgever(naam, uurloon);
+    "pushEmployerToList": (naam, uurloon, color)=>{
+        const werkgever = new Werkgever(naam, uurloon, color);
         werkgevers.push(werkgever);
     },
     "parseFloatToHourFormat":(float)=>{
@@ -170,6 +169,14 @@ const dataMethods = {
     "getCurrentShiftID": () => {
         let id = var_currentShiftID;
         return id;
+    },
+    "logShiftData": () => {
+        const data = shifts;
+        console.log(data);
+    },
+    "logEmployerData": () => {
+        const data = werkgevers;
+       console.log(data);
     }
 }
 export const shiftsExport = shifts;
