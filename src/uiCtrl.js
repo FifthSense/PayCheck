@@ -742,5 +742,11 @@ const uiMethods = {
         uiSelectors.mainUI.addCard.currentYearOutput.innerHTML = uiSelectors.yearMonthSelection.yearSelection.value;
     }
 }
+const init = () =>{
+    uiMethods.loadEventListeners();
+    uiMethods.populateEmployerSelection();
+    uiMethods.populateStatisticsEmployerSelection();
+    uiMethods.displayShiftList();
+}
 
-export const uiMethodsExport = uiMethods;
+export const uiInit = init;

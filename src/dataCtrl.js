@@ -1,120 +1,8 @@
-const shifts = {
-        x2020: [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ],
-        x2021: [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ],
-        x2022: [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ],
-        x2023: [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ],
-        x2024: [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ],
-        x2025: [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ],
-        x2026: [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ],
-        x2027: [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ]
-    };
+import {storageMethodsExport} from './storageCtrl';
 
-const werkgevers = []
-let var_currentShiftID = 1;
+let shifts = storageMethodsExport.getShifts();
+let werkgevers = storageMethodsExport.getWerkgevers();
+let var_currentShiftID = storageMethodsExport.getCurrentShiftID();
 
 class Shift {
     constructor(dag, startuur, einduur, werkgever, id){
@@ -179,6 +67,7 @@ const dataMethods = {
        console.log(data);
     }
 }
+
 export const shiftsExport = shifts;
 export const werkgeversExport = werkgevers;
 export const dataMethodsExport = dataMethods;
