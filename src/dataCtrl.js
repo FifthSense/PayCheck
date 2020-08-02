@@ -27,6 +27,7 @@ const dataMethods = {
     "pushShiftToList": (currentMonth, dag, startuur, einduur, werkgever, id)=>{
         const shift = new Shift(dag, startuur, einduur, werkgever, id);
         currentMonth.push(shift);
+        storageMethodsExport.storeShift(shift);
     },
     "pushEmployerToList": (naam, uurloon, color)=>{
         const werkgever = new Werkgever(naam, uurloon, color);

@@ -1,3 +1,9 @@
+import {
+    uiMethodsExport,
+    currentYearArrayExport,
+    currentMonthIndexExport
+} from './uiCtrl';
+
 const storageMethods = {
     "getShifts":()=>{
         let shifts;
@@ -117,8 +123,9 @@ const storageMethods = {
                 ]
             };
         } else {
-            shifts = localStorage.getItem('shifts');
+            shifts = JSON.parse(localStorage.getItem('shifts'));
         }
+        console.log(shifts)
         return shifts;
     },
     "getCurrentShiftID":()=>{
@@ -126,7 +133,7 @@ const storageMethods = {
         if(localStorage.getItem('currentShiftID') === null){
             currentShiftID = 1;
         } else {
-            currentShiftID = localStorage.getItem('currentShiftID');
+            currentShiftID = JSON.parse(localStorage.getItem('currentShiftID'));
         }
         return currentShiftID;
     },
@@ -135,9 +142,20 @@ const storageMethods = {
         if(localStorage.getItem('werkgevers') === null){
             werkgevers = [];
         } else {
-            werkgevers = localStorage.getItem('werkgevers');
+            werkgevers = JSON.parse(localStorage.getItem('werkgevers'));
         }
         return werkgevers;
+    },
+    "storeShift":(shift)=>{
+        let shifts = Object.entries(storageMethods.getShifts());
+        shifts.forEach((year)=>{
+            if(year[0] === uiMethodsExport.getClippedCurrentYearArray()){
+                year[1][currentMonthIndexExport].push(shift);
+            }
+        });
+        shifts = Object.fromEntries(shifts);
+        shifts = JSON.stringify(shifts);
+        localStorage.setItem('shifts', shifts);
     }
 }
 

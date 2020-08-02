@@ -740,6 +740,10 @@ const uiMethods = {
     },
     "insertCurrentYear": () => {
         uiSelectors.mainUI.addCard.currentYearOutput.innerHTML = uiSelectors.yearMonthSelection.yearSelection.value;
+    },
+    "getClippedCurrentYearArray":()=>{
+        let res = uiSelectors.yearMonthSelection.yearSelection.value;
+        return res;
     }
 }
 const init = () =>{
@@ -749,4 +753,6 @@ const init = () =>{
     uiMethods.displayShiftList();
 }
 
+export const currentMonthIndexExport = currentMonthIndex;
+export const uiMethodsExport = uiMethods;
 export const uiInit = init;
