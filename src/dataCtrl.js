@@ -32,6 +32,7 @@ const dataMethods = {
     "pushEmployerToList": (naam, uurloon, color)=>{
         const werkgever = new Werkgever(naam, uurloon, color);
         werkgevers.push(werkgever);
+        storageMethodsExport.storeEmployer(werkgever);
     },
     "parseFloatToHourFormat":(float)=>{
         float = float.replace('.00', ':00');

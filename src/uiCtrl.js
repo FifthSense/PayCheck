@@ -3,6 +3,7 @@ import {
     werkgeversExport,
     dataMethodsExport
 } from './dataCtrl';
+import { storageMethodsExport } from './storageCtrl';
 
 let settingsVisibility = false;
 let addEmployerContainerVisibility = false;
@@ -85,8 +86,6 @@ const uiMethods = {
         uiSelectors.yearMonthSelection.yearSelection.addEventListener('change', uiMethods.changeYear);
         uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.enterEditState);
         uiSelectors.mainUI.shiftOutput.addEventListener('click', uiMethods.deleteShift);
-        uiSelectors.mainUI.shiftOutput.addEventListener('click', dataMethodsExport.logShiftData);
-        uiSelectors.mainUI.shiftOutput.addEventListener('click', dataMethodsExport.logEmployerData);
         uiSelectors.statistics.werkgeverSelector.addEventListener('change', uiMethods.populateStatistics);
         //Month-Changer
         uiSelectors.yearMonthSelection.monthSelection.januari.addEventListener('click', () => {
@@ -338,7 +337,7 @@ const uiMethods = {
                 <div style="border-left:solid 20px ${color}" class="card card-body mt-1 mb-2">
                     <div class="row">
                     <div class="col-8">
-                        <h3 class="card-title"><span>${shift.dag}</span><span> ${uiMethods.getCurrentMonth()} ${uiSelectors.yearMonthSelection.yearSelection.value} - ${shift.werkgever.naam}</span></h3>
+                        <h3 class="card-title"><span>${shift.dag}</span><span> ${uiMethods.getCurrentMonth()} ${uiSelectors.yearMonthSelection.yearSelection.value.replace('x','')} - ${shift.werkgever.naam}</span></h3>
                         <p><span>${startuur}</span> - <span>${einduur}</span></p>
                     </div>
                     <div class="col-4">
@@ -369,7 +368,6 @@ const uiMethods = {
                 shift.startuur = uiSelectors.mainUI.addCard.startUurInput.value;
                 shift.einduur = uiSelectors.mainUI.addCard.eindUurInput.value;
                 shift.werkgever = uiMethods.getCurrentEmployer();
-                console.log(shift);
                 uiMethods.resetInputValues();
             }
         });
@@ -386,6 +384,7 @@ const uiMethods = {
                 }
             });
             uiMethods.displayShiftList();
+            storageMethodsExport.deleteshift(shiftToDeleteID);
         }
     },
     "displayMonthlyHours": () => {
@@ -739,7 +738,8 @@ const uiMethods = {
         uiSelectors.mainUI.addCard.currentMonthOutput.innerHTML = uiMethods.getCurrentMonth();
     },
     "insertCurrentYear": () => {
-        uiSelectors.mainUI.addCard.currentYearOutput.innerHTML = uiSelectors.yearMonthSelection.yearSelection.value;
+        let currentYear = uiSelectors.yearMonthSelection.yearSelection.value.replace("x","");
+        uiSelectors.mainUI.addCard.currentYearOutput.innerHTML = currentYear;
     },
     "getClippedCurrentYearArray":()=>{
         let res = uiSelectors.yearMonthSelection.yearSelection.value;

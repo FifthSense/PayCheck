@@ -125,7 +125,6 @@ const storageMethods = {
         } else {
             shifts = JSON.parse(localStorage.getItem('shifts'));
         }
-        console.log(shifts)
         return shifts;
     },
     "getCurrentShiftID":()=>{
@@ -151,6 +150,28 @@ const storageMethods = {
         shifts.forEach((year)=>{
             if(year[0] === uiMethodsExport.getClippedCurrentYearArray()){
                 year[1][currentMonthIndexExport].push(shift);
+            }
+        });
+        shifts = Object.fromEntries(shifts);
+        shifts = JSON.stringify(shifts);
+        localStorage.setItem('shifts', shifts);
+    },
+    "storeEmployer":(employer)=>{
+        let employers = storageMethods.getWerkgevers();
+        employers.push(employer);
+        employers = JSON.stringify(employers);
+        localStorage.setItem('werkgevers', employers);
+    },
+    "deleteshift":(id)=>{
+        let shifts = Object.entries(storageMethods.getShifts());
+        shifts.forEach((year)=>{
+            if(year[0] === uiMethodsExport.getClippedCurrentYearArray()){
+                year[1][currentMonthIndexExport].forEach((shift)=>{
+                    if(shift.id = id){
+                        let shiftIndex = year[1][currentMonthIndexExport].findIndex(i => i.id === id);
+                        year[1][currentMonthIndexExport].splice(shiftIndex, shiftIndex >= 0 ? 1 : 0);
+                    }
+                });
             }
         });
         shifts = Object.fromEntries(shifts);
