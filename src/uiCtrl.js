@@ -283,13 +283,15 @@ const uiMethods = {
         let name = uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value;
         let pay = uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.value;
         let color = uiSelectors.mainUI.addEmployerContainer.addEmployerColorInput.value;
+        let id = dataMethodsExport.getCurrentEmployerID();
         if (name !== "" && pay !== "" && color !== "") {
-            dataMethodsExport.pushEmployerToList(name, pay, color);
+            dataMethodsExport.pushEmployerToList(name, pay, color, id);
             uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.value = "";
             uiSelectors.mainUI.addEmployerContainer.addEmployerPayInput.value = "";
             uiSelectors.mainUI.addEmployerContainer.addEmployerColorInput.value = "#ff0000";
             uiMethods.populateEmployerSelection();
             uiMethods.addEmployerToStatisticsSelection(name);
+            dataMethodsExport.iterateCurrentEmployerID();
         } else {
             if (name === "") {
                 uiSelectors.mainUI.addEmployerContainer.addEmployerNameInput.style.borderColor = "red";
@@ -362,8 +364,10 @@ const uiMethods = {
         uiSelectors.mainUI.shiftOutput.innerHTML = output;
     },
     "editShift": () => {
+        let currentShift;
         uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
             if (parseInt(shiftToEditID) === shift.id) {
+                currentShift = shift;
                 shift.dag = uiSelectors.mainUI.addCard.dateInput.value;
                 shift.startuur = uiSelectors.mainUI.addCard.startUurInput.value;
                 shift.einduur = uiSelectors.mainUI.addCard.eindUurInput.value;
@@ -373,6 +377,7 @@ const uiMethods = {
         });
         uiMethods.displayShiftList();
         uiMethods.leaveEditState();
+        storageMethodsExport.editShift(currentShift);
     },
     "deleteShift": (e) => {
         if (e.target.classList.contains('fa-remove')) {
@@ -384,7 +389,7 @@ const uiMethods = {
                 }
             });
             uiMethods.displayShiftList();
-            storageMethodsExport.deleteshift(shiftToDeleteID);
+            storageMethodsExport.deleteShift(shiftToDeleteID);
         }
     },
     "displayMonthlyHours": () => {

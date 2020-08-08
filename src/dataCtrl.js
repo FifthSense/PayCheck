@@ -3,6 +3,7 @@ import {storageMethodsExport} from './storageCtrl';
 let shifts = storageMethodsExport.getShifts();
 let werkgevers = storageMethodsExport.getWerkgevers();
 let var_currentShiftID = storageMethodsExport.getCurrentShiftID();
+let var_currentEmployerID = storageMethodsExport.getCurrentShiftID();
 
 class Shift {
     constructor(dag, startuur, einduur, werkgever, id){
@@ -16,10 +17,11 @@ class Shift {
 }
 
 class Werkgever {
-    constructor(naam, uurloon, color){
+    constructor(naam, uurloon, color, id){
         this.naam = naam,
         this.uurloon = uurloon,
-        this.color = color
+        this.color = color,
+        this.id = id
     }
 }
 
@@ -29,8 +31,8 @@ const dataMethods = {
         currentMonth.push(shift);
         storageMethodsExport.storeShift(shift);
     },
-    "pushEmployerToList": (naam, uurloon, color)=>{
-        const werkgever = new Werkgever(naam, uurloon, color);
+    "pushEmployerToList": (naam, uurloon, color, id)=>{
+        const werkgever = new Werkgever(naam, uurloon, color, id);
         werkgevers.push(werkgever);
         storageMethodsExport.storeEmployer(werkgever);
     },
@@ -55,9 +57,20 @@ const dataMethods = {
         let id = var_currentShiftID;
         id++;
         var_currentShiftID = id;
+        storageMethodsExport.setCurrentShiftID(id);
     },
     "getCurrentShiftID": () => {
         let id = var_currentShiftID;
+        return id;
+    },
+    "iterateCurrentEmployerID": () => {
+        let id = var_currentEmployerID;
+        id++;
+        var_currentEmployerID = id;
+        storageMethodsExport.setCurrentEmployerID(id);
+    },
+    "getCurrentEmployerID": () => {
+        let id = var_currentEmployerID;
         return id;
     },
     "logShiftData": () => {
