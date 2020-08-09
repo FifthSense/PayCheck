@@ -131,7 +131,8 @@ const storageMethods = {
         let shifts = Object.entries(storageMethods.getShifts());
         shifts.forEach((year)=>{
             if(year[0] === uiMethodsExport.getClippedCurrentYearArray()){
-                year[1][currentMonthIndexExport].push(shift);
+                year[1][uiMethodsExport.getCurrentMonthIndex()].push(shift);
+                console.log(uiMethodsExport.getCurrentMonthIndex());
             }
         });
         shifts = Object.fromEntries(shifts);
@@ -142,9 +143,9 @@ const storageMethods = {
         let shifts = Object.entries(storageMethods.getShifts());
         shifts.forEach((year)=>{
             if(year[0] === uiMethodsExport.getClippedCurrentYearArray()){
-                year[1][currentMonthIndexExport].forEach((shift)=>{
-                        let shiftIndex = year[1][currentMonthIndexExport].findIndex(i => i.id === id);
-                        year[1][currentMonthIndexExport].splice(shiftIndex, shiftIndex >= 0 ? 1 : 0);
+                year[1][uiMethodsExport.getCurrentMonthIndex()].forEach((shift)=>{
+                        let shiftIndex = year[1][uiMethodsExport.getCurrentMonthIndex()].findIndex(i => i.id === id);
+                        year[1][uiMethodsExport.getCurrentMonthIndex()].splice(shiftIndex, shiftIndex >= 0 ? 1 : 0);
                 });
             }
         });

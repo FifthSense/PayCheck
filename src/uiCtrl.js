@@ -91,6 +91,7 @@ const uiMethods = {
         uiSelectors.yearMonthSelection.monthSelection.januari.addEventListener('click', () => {
             uiMethods.changeMonthIndex(0);
             uiMethods.changeActiveMonthIndicator();
+            console.log(currentMonthIndexExport);
         });
         uiSelectors.yearMonthSelection.monthSelection.februari.addEventListener('click', () => {
             uiMethods.changeMonthIndex(1);
@@ -556,6 +557,9 @@ const uiMethods = {
         let currentMonthArray = currentYearArray[monthIndex];
         return currentMonthArray;
     },
+    "getCurrentMonthIndex": () => {
+        return currentMonthIndex;
+    },
     "changeMonthIndex": (newMonthIndex) => {
         currentMonthIndex = newMonthIndex;
         uiMethods.displayShiftList();
@@ -762,6 +766,6 @@ const init = () =>{
     console.log()
 }
 
-export const currentMonthIndexExport = currentMonthIndex;
+// export const currentMonthIndexExport = currentMonthIndex;
 export const uiMethodsExport = uiMethods;
 export const uiInit = init;
