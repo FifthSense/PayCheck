@@ -153,6 +153,7 @@ const storageMethods = {
         localStorage.setItem('shifts', shifts);
     },
     "editShift":(shiftToEdit)=>{
+        console.log(shiftToEdit);
         let shifts = Object.entries(storageMethods.getShifts());
         shifts.forEach((year)=>{
             if(year[0] === uiMethodsExport.getClippedCurrentYearArray()){
@@ -173,7 +174,7 @@ const storageMethods = {
         if(localStorage.getItem('nextShiftID') === null){
             currentShiftID = 1;
         } else {
-            currentShiftID = localStorage.getItem('nextShiftID');
+            currentShiftID = parseInt(localStorage.getItem('nextShiftID'));
         }
         return currentShiftID;
     },
@@ -209,7 +210,7 @@ const storageMethods = {
         if(localStorage.getItem('nextEmployerID') === null){
             currentShiftID = 1;
         } else {
-            currentShiftID = localStorage.getItem('nextEmployerID');
+            currentShiftID = parseInt(localStorage.getItem('nextEmployerID'));
         }
         return currentShiftID;
     },

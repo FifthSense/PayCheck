@@ -248,6 +248,7 @@ const uiMethods = {
         if (uiMethods.getCurrentEmployer) {
             uiSelectors.mainUI.settingsContainer.editEmployerNameInput.value = uiMethods.getCurrentEmployer().naam;
             uiSelectors.mainUI.settingsContainer.editEmployerPayInput.value = uiMethods.getCurrentEmployer().uurloon;
+            uiSelectors.mainUI.settingsContainer.editEmployerColorInput.value = uiMethods.getCurrentEmployer().color;
         } else {
             uiSelectors.mainUI.addCard.warning.style.display = "block";
             window.setTimeout(() => {
@@ -366,12 +367,13 @@ const uiMethods = {
     "editShift": () => {
         let currentShift;
         uiMethods.getCurrentMonthArray(currentMonthIndex).forEach((shift) => {
-            if (parseInt(shiftToEditID) === shift.id) {
+            if (shiftToEditID === shift.id) {
                 currentShift = shift;
                 shift.dag = uiSelectors.mainUI.addCard.dateInput.value;
                 shift.startuur = uiSelectors.mainUI.addCard.startUurInput.value;
                 shift.einduur = uiSelectors.mainUI.addCard.eindUurInput.value;
                 shift.werkgever = uiMethods.getCurrentEmployer();
+                shift.totalPay = ((parseFloat(shift.einduur) - parseFloat(shift.startuur)) * parseFloat(shift.werkgever.uurloon)).toFixed(2)
                 uiMethods.resetInputValues();
             }
         });
@@ -388,6 +390,7 @@ const uiMethods = {
                     uiMethods.getCurrentMonthArray(currentMonthIndex).splice(shiftIndex, shiftIndex >= 0 ? 1 : 0);
                 }
             });
+            console.log();
             uiMethods.displayShiftList();
             storageMethodsExport.deleteShift(shiftToDeleteID);
         }
@@ -756,6 +759,7 @@ const init = () =>{
     uiMethods.populateEmployerSelection();
     uiMethods.populateStatisticsEmployerSelection();
     uiMethods.displayShiftList();
+    console.log()
 }
 
 export const currentMonthIndexExport = currentMonthIndex;
