@@ -91,7 +91,6 @@ const uiMethods = {
         uiSelectors.yearMonthSelection.monthSelection.januari.addEventListener('click', () => {
             uiMethods.changeMonthIndex(0);
             uiMethods.changeActiveMonthIndicator();
-            console.log(currentMonthIndexExport);
         });
         uiSelectors.yearMonthSelection.monthSelection.februari.addEventListener('click', () => {
             uiMethods.changeMonthIndex(1);
@@ -148,7 +147,7 @@ const uiMethods = {
             let shiftstart = dataMethodsExport.parseHourToFloatFormat(e.target.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild.nextElementSibling.firstElementChild.innerText);
             let shiftend = dataMethodsExport.parseHourToFloatFormat(e.target.parentElement.parentElement.parentElement.previousElementSibling.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.innerText);
             //Store ID of targeted shift in the designated variable
-            shiftToEditID = e.target.parentElement.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.innerText;
+            shiftToEditID = parseInt(e.target.parentElement.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.innerText);
 
             uiSelectors.mainUI.addCard.dateInput.value = shiftdate;
             uiSelectors.mainUI.addCard.startUurInput.value = shiftstart;

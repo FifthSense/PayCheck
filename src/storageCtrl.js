@@ -154,14 +154,13 @@ const storageMethods = {
         localStorage.setItem('shifts', shifts);
     },
     "editShift":(shiftToEdit)=>{
-        console.log(shiftToEdit);
         let shifts = Object.entries(storageMethods.getShifts());
         shifts.forEach((year)=>{
             if(year[0] === uiMethodsExport.getClippedCurrentYearArray()){
-                year[1][currentMonthIndexExport].forEach((shift)=>{
-                        let shiftIndex = year[1][currentMonthIndexExport].findIndex(i => i.id === shiftToEdit.id);
-                        year[1][currentMonthIndexExport].splice(shiftIndex, shiftIndex >= 0 ? 1 : 0);
-                        year[1][currentMonthIndexExport].push(shiftToEdit);
+                year[1][uiMethodsExport.getCurrentMonthIndex()].forEach((shift)=>{
+                        let shiftIndex = year[1][uiMethodsExport.getCurrentMonthIndex()].findIndex(i => i.id === shiftToEdit.id);
+                        year[1][uiMethodsExport.getCurrentMonthIndex()].splice(shiftIndex, shiftIndex >= 0 ? 1 : 0);
+                        year[1][uiMethodsExport.getCurrentMonthIndex()].push(shiftToEdit);
                 });
             }
         });
